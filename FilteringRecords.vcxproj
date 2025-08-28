@@ -21,6 +21,13 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ClassRule.h" />
+    <ClInclude Include="DataCheckResult.h" />
+    <ClInclude Include="Property.h" />
+    <ClInclude Include="Record.h" />
+    <ClInclude Include="Rule.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
