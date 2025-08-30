@@ -18,7 +18,6 @@ namespace {
         for (char c : s) if (!std::isspace((unsigned char)c)) return false;
         return true;
     }
-
     // Split by delimiter ignoring delimiters inside [...] blocks.
     std::vector<std::string> splitOutsideBrackets(const std::string& line, char delim) {
         std::vector<std::string> parts;
@@ -43,7 +42,7 @@ namespace {
         out.clear();
         std::string s = trim(in);
         size_t lb = s.find('['), rb = s.rfind(']');
-        if (lb == std::string:: || rb == std::string::npos || rb < lb) return false;
+        if (lb == std::string::npos || rb == std::string::npos || rb < lb) return false;
         std::string inside = s.substr(lb + 1, rb - lb - 1);
         auto items = splitOutsideBrackets(inside, ',');
         for (auto& it : items) {
