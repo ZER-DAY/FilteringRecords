@@ -38,12 +38,12 @@ namespace {
         if (!cur.empty()) parts.push_back(trim(cur));
         return parts;
     }
-
+    // Parse integer vector from string like "[1, 2, 3]".
     bool parseIntVector(const std::string& in, std::vector<int>& out) {
         out.clear();
         std::string s = trim(in);
         size_t lb = s.find('['), rb = s.rfind(']');
-        if (lb == std::string::npos || rb == std::string::npos || rb < lb) return false;
+        if (lb == std::string:: || rb == std::string::npos || rb < lb) return false;
         std::string inside = s.substr(lb + 1, rb - lb - 1);
         auto items = splitOutsideBrackets(inside, ',');
         for (auto& it : items) {
