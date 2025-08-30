@@ -18,6 +18,26 @@ namespace {
         for (char c : s) if (!std::isspace((unsigned char)c)) return false;
         return true;
     }
+
+    // Split by delimiter ignoring delimiters inside [...] blocks.
+    std::vector<std::string> splitOutsideBrackets(const std::string& line, char delim) {
+        std::vector<std::string> parts;
+        std::string cur;
+        int depth = 0;
+        for (char c : line) {
+            if (c == '[') ++depth;
+            else if (c == ']') --depth;
+            if (c == delim && depth == 0) {
+                parts.push_back(trim(cur));
+                cur.clear();
+            }
+            else {
+                cur.push_back(c);
+            }
+        }
+        if (!cur.empty()) parts.push_back(trim(cur));
+        return parts;
+    }
 }
 
 namespace Parser {
