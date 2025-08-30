@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <cctype>
+#include <fstream>
 
 // Local helpers live in an anonymous namespace.
 namespace {
@@ -13,20 +14,31 @@ namespace {
         return s.substr(b, e - b + 1);
     }
 
-    // Check if a string is whitespace-only.
     bool isBlank(const std::string& s) {
         for (char c : s) if (!std::isspace((unsigned char)c)) return false;
         return true;
     }
 }
 
-// Minimal stub to keep project compiling while we add features step by step.
 namespace Parser {
-    bool parseFile(const std::string&,
+    bool parseFile(const std::string& path,
         std::vector<Record>&,
         std::vector<ClassRule>&,
         std::string& errMsg) {
-        errMsg = "parser not implemented yet";
+        std::ifstream fin(path);
+        if (!fin.is_open()) { errMsg = "Cannot open the file"; return false; }
+
+        std::vector<std::string> lines;
+        std::string line;
+        while (std::getline(fin, line)) {
+            if (lines.empty() && line.size() >= 3 &&
+                (unsigned char)line[0] == 0xEF && (unsigned char)line[1] == 0xBB && (unsigned char)line[2] == 0xBF) {
+                line = line.substr(3);
+            }
+            lines.push_back(line);
+        }
+
+        errMsg = "parser: sections not processed yet";
         return false;
     }
 }
