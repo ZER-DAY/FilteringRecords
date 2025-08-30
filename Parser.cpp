@@ -52,7 +52,40 @@ namespace {
         }
         return true;
     }
+
+    // Parse record line: "<Name>: prop = [..], prop2 = [..]"
+    bool parseRecordLine(const std::string& line, Record& rec) {
+        auto pos = line.find(':');
+        if (pos == std::string::npos) return false;
+
+        rec.name = trim(line.substr(0, pos));
+        std::string right = trim(line.substr(pos + 1));
+        if (rec.name.empty()) return false;
+
+        if (right.empty()) {
+            // Record without properties is syntactically OK; validated later.
+            return true;
+        }
+        auto props = splitOutsideBrackets(right, ',');
+        for (auto& p : props) {
+            auto eq = p.find('=');
+            if (eq == std::string::npos) return false;
+            std::string pname = trim(p.substr(0, eq));
+            std::string pvalue = trim(p.substr(eq + 1));
+            if (pname.empty()) return false;
+
+            std::vector<int> values;
+            if (!parseIntVector(pvalue, values)) return false;
+
+            Property prop{ pname, values };
+            rec.properties[pname] = std::move(prop);
+        }
+        return true;
+    
+    }
+
 }
+
 
 namespace Parser {
     bool parseFile(const std::string& path,
