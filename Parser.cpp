@@ -4,9 +4,8 @@
 #include <cctype>
 #include <fstream>
 
-// Local helpers live in an anonymous namespace.
+// Local helpers
 namespace {
-    // Trim whitespace from both ends.
     std::string trim(const std::string& s) {
         size_t b = s.find_first_not_of(" \t\r\n");
         if (b == std::string::npos) return "";
@@ -18,7 +17,7 @@ namespace {
         for (char c : s) if (!std::isspace((unsigned char)c)) return false;
         return true;
     }
-    // Split by delimiter ignoring delimiters inside [...] blocks.
+
     std::vector<std::string> splitOutsideBrackets(const std::string& line, char delim) {
         std::vector<std::string> parts;
         std::string cur;
@@ -37,7 +36,7 @@ namespace {
         if (!cur.empty()) parts.push_back(trim(cur));
         return parts;
     }
-    // Parse integer vector from string like "[1, 2, 3]".
+
     bool parseIntVector(const std::string& in, std::vector<int>& out) {
         out.clear();
         std::string s = trim(in);
@@ -53,7 +52,6 @@ namespace {
         return true;
     }
 
-    // Parse record line: "<Name>: prop = [..], prop2 = [..]"
     bool parseRecordLine(const std::string& line, Record& rec) {
         auto pos = line.find(':');
         if (pos == std::string::npos) return false;
@@ -62,10 +60,8 @@ namespace {
         std::string right = trim(line.substr(pos + 1));
         if (rec.name.empty()) return false;
 
-        if (right.empty()) {
-            // Record without properties is syntactically OK; validated later.
-            return true;
-        }
+        if (right.empty()) return true;
+
         auto props = splitOutsideBrackets(right, ',');
         for (auto& p : props) {
             auto eq = p.find('=');
@@ -81,16 +77,13 @@ namespace {
             rec.properties[pname] = std::move(prop);
         }
         return true;
-    
     }
-
 }
-
 
 namespace Parser {
     bool parseFile(const std::string& path,
-        std::vector<Record>&,
-        std::vector<ClassRule>&,
+        std::vector<Record>& outRecords,
+        std::vector<ClassRule>& outClassRules,
         std::string& errMsg) {
         std::ifstream fin(path);
         if (!fin.is_open()) { errMsg = "Cannot open the file"; return false; }
@@ -105,7 +98,38 @@ namespace Parser {
             lines.push_back(line);
         }
 
-        errMsg = "parser: sections not processed yet";
+        size_t i = 0;
+        if (i < lines.size() && trim(lines[i]) == "??????:") ++i;
+
+        std::vector<std::string> recLines;
+        for (; i < lines.size(); ++i) {
+            std::string t = trim(lines[i]);
+            if (t == "??????:" || isBlank(t)) break;
+            recLines.push_back(lines[i]);
+        }
+
+        while (i < lines.size() && isBlank(lines[i])) ++i;
+        if (i < lines.size() && trim(lines[i]) == "??????:") ++i;
+
+        std::vector<std::string> classLines;
+        for (; i < lines.size(); ++i) {
+            std::string t = trim(lines[i]);
+            if (t.empty()) continue;
+            classLines.push_back(lines[i]);
+        }
+
+        outRecords.clear();
+        for (auto& rl : recLines) {
+            Record r;
+            if (!parseRecordLine(rl, r)) {
+                errMsg = "Invalid record line: " + rl;
+                return false;
+            }
+            outRecords.push_back(std::move(r));
+        }
+
+        (void)outClassRules;
+        errMsg = "parser: class rules not parsed yet";
         return false;
     }
 }
