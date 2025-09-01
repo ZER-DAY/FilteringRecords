@@ -3,10 +3,10 @@
 #include <vector>
 #include <cctype>
 #include <fstream>
+#include <sstream>
 
 // some helper functions for strings
 namespace {
-    // remove spaces/tabs/newlines from both sides
     std::string trim(const std::string& s) {
         size_t b = s.find_first_not_of(" \t\r\n");
         if (b == std::string::npos) return "";
@@ -66,10 +66,7 @@ namespace {
         std::string right = trim(line.substr(pos + 1));
         if (rec.name.empty()) return false;
 
-        if (right.empty()) {
-            // record with no properties (we'll validate later)
-            return true;
-        }
+        if (right.empty()) return true;
 
         auto props = splitOutsideBrackets(right, ',');
         for (auto& p : props) {
@@ -95,6 +92,41 @@ namespace {
         if (q1 == std::string::npos || q2 == std::string::npos || q2 <= q1 + 1) return false;
         propName = s.substr(q1 + 1, q2 - q1 - 1);
         return true;
+    }
+
+    // now supports: HAS_PROPERTY and PROPERTY_SIZE
+    bool parseOneRulePhrase(const std::string& phrase, Rule& ruleOut) {
+        std::string s = trim(phrase);
+
+        // HAS_PROPERTY: есть свойство "имя"
+        if (s.find("есть свойство") != std::string::npos) {
+            std::string prop;
+            if (extractQuotedProperty(s, prop)) {
+                ruleOut.type = RuleType::HAS_PROPERTY;
+                ruleOut.propertyName = prop;
+                return true;
+            }
+        }
+
+        // PROPERTY_SIZE: свойство "имя" содержит N значений
+        if (s.find("содержит") != std::string::npos &&
+            s.find("значен") != std::string::npos &&
+            s.find("значение") == std::string::npos) {
+            std::string prop;
+            if (extractQuotedProperty(s, prop)) {
+                std::string tail = s.substr(s.find("содержит") + 8);
+                std::stringstream ss(tail);
+                int n = 0;
+                if (ss >> n) {
+                    ruleOut.type = RuleType::PROPERTY_SIZE;
+                    ruleOut.propertyName = prop;
+                    ruleOut.expectedSize = n;
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
 
@@ -129,9 +161,7 @@ namespace Parser {
             recLines.push_back(lines[i]);
         }
 
-        // skip possible blank gap
         while (i < lines.size() && isBlank(lines[i])) ++i;
-
         // optional header for classes
         if (i < lines.size() && trim(lines[i]) == "Классы:") ++i;
 
