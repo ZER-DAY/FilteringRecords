@@ -57,7 +57,7 @@ namespace {
     }
 
     // parse a record line like:
-    // "Стол: цвет = [1, 4], размер = [20, 40], покрытие = [44]"
+   // "Стол: цвет = [1, 4], размер = [20, 40], покрытие = [44]"
     bool parseRecordLine(const std::string& line, Record& rec) {
         auto pos = line.find(':');
         if (pos == std::string::npos) return false;
@@ -94,7 +94,7 @@ namespace {
         return true;
     }
 
-    // now supports: HAS_PROPERTY and PROPERTY_SIZE
+    // now supports: HAS_PROPERTY, PROPERTY_SIZE, CONTAINS_VALUE
     bool parseOneRulePhrase(const std::string& phrase, Rule& ruleOut) {
         std::string s = trim(phrase);
 
@@ -121,6 +121,22 @@ namespace {
                     ruleOut.type = RuleType::PROPERTY_SIZE;
                     ruleOut.propertyName = prop;
                     ruleOut.expectedSize = n;
+                    return true;
+                }
+            }
+        }
+
+        // CONTAINS_VALUE: contains specific value
+        if (s.find("содержит значение") != std::string::npos) {
+            std::string prop;
+            if (extractQuotedProperty(s, prop)) {
+                std::string tail = s.substr(s.find("содержит значение") + 17);
+                std::stringstream ss(tail);
+                int x = 0;
+                if (ss >> x) {
+                    ruleOut.type = RuleType::CONTAINS_VALUE;
+                    ruleOut.propertyName = prop;
+                    ruleOut.expectedValue = x;
                     return true;
                 }
             }
