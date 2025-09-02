@@ -57,7 +57,7 @@ namespace {
     }
 
     // parse a record line like:
-   // "Стол: цвет = [1, 4], размер = [20, 40], покрытие = [44]"
+    // "Стол: цвет = [1, 4], размер = [20, 40], покрытие = [44]"
     bool parseRecordLine(const std::string& line, Record& rec) {
         auto pos = line.find(':');
         if (pos == std::string::npos) return false;
@@ -94,11 +94,30 @@ namespace {
         return true;
     }
 
-    // now supports: HAS_PROPERTY, PROPERTY_SIZE, CONTAINS_VALUE
+    // supports all 4: HAS_PROPERTY, PROPERTY_SIZE, CONTAINS_VALUE, EQUALS_EXACTLY
     bool parseOneRulePhrase(const std::string& phrase, Rule& ruleOut) {
         std::string s = trim(phrase);
 
-        // HAS_PROPERTY: есть свойство "имя"
+        // EQUALS_EXACTLY: property "name" equals [a, b, c]
+        {
+            size_t eq = s.find('=');
+            if (eq != std::string::npos) {
+                std::string left = trim(s.substr(0, eq));
+                std::string right = trim(s.substr(eq + 1));
+                std::string prop;
+                if (extractQuotedProperty(left, prop)) {
+                    std::vector<int> expected;
+                    if (parseIntVector(right, expected)) {
+                        ruleOut.type = RuleType::EQUALS_EXACTLY;
+                        ruleOut.propertyName = prop;
+                        ruleOut.expectedExactValues = std::move(expected);
+                        return true;
+                    }
+                }
+            }
+        }
+
+        // HAS_PROPERTY
         if (s.find("есть свойство") != std::string::npos) {
             std::string prop;
             if (extractQuotedProperty(s, prop)) {
@@ -108,7 +127,7 @@ namespace {
             }
         }
 
-        // PROPERTY_SIZE: свойство "имя" содержит N значений
+        // PROPERTY_SIZE
         if (s.find("содержит") != std::string::npos &&
             s.find("значен") != std::string::npos &&
             s.find("значение") == std::string::npos) {
@@ -126,7 +145,7 @@ namespace {
             }
         }
 
-        // CONTAINS_VALUE: contains specific value
+        // CONTAINS_VALUE
         if (s.find("содержит значение") != std::string::npos) {
             std::string prop;
             if (extractQuotedProperty(s, prop)) {
@@ -144,9 +163,37 @@ namespace {
 
         return false;
     }
+
+    // parse class line like:
+    // "Синий: свойство "цвет" содержит значение 1"
+    bool parseClassLine(const std::string& line, ClassRule& cr) {
+        auto pos = line.find(':');
+        if (pos == std::string::npos) return false;
+
+        cr.className = trim(line.substr(0, pos));
+        std::string desc = trim(line.substr(pos + 1));
+        if (cr.className.empty() || desc.empty()) return false;
+
+        std::vector<std::string> phrases;
+        if (desc.find(';') == std::string::npos) {
+            phrases.push_back(desc);
+        }
+        else {
+            phrases = splitOutsideBrackets(desc, ';');
+        }
+
+        cr.rules.clear();
+        for (auto& ph : phrases) {
+            if (trim(ph).empty()) continue;
+            Rule r;
+            if (!parseOneRulePhrase(ph, r)) return false;
+            cr.rules.push_back(std::move(r));
+        }
+        return true;
+    }
 }
 
-// parseFile: split into "records" and "classes" blocks, and parse records
+// parseFile: split blocks, parse records, then parse classes
 namespace Parser {
     bool parseFile(const std::string& path,
         std::vector<Record>& outRecords,
@@ -200,9 +247,18 @@ namespace Parser {
             outRecords.push_back(std::move(r));
         }
 
-        // classes parsing comes next
-        (void)outClassRules;
-        errMsg = "parser: class rules not parsed yet";
-        return false;
+        // parse class rules now
+        outClassRules.clear();
+        for (auto& cl : classLines) {
+            ClassRule cr;
+            if (!parseClassLine(cl, cr)) {
+                errMsg = "Invalid class/rule line: " + cl;
+                return false;
+            }
+            outClassRules.push_back(std::move(cr));
+        }
+
+        errMsg.clear();
+        return true;
     }
 }
