@@ -31,4 +31,12 @@ namespace Matching {
         }
         return false;
     }
+
+    // Check if a record matches all rules of a class
+    bool match_all_rules(const Record& record, const ClassRule& classRule) {
+        for (const auto& ru : classRule.rules) {
+            if (!match_rule(record, ru)) return false;
+        }
+        return true;
+    }
 }
