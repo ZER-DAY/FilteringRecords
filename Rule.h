@@ -20,11 +20,41 @@ enum RuleType {
     EQUALS_EXACTLY
 };
 
-// Single rule (feature) of a class.
+/*
+ * Structure: Rule
+ * ---------------
+ * Represents a single classification rule.
+ *
+ * Fields:
+ *   - type                : the type of rule (from RuleType).
+ *   - propertyName        : the property to which this rule applies.
+ *   - expectedSize        : expected number of values (used for PROPERTY_SIZE).
+ *   - expectedValue       : specific value to check (used for CONTAINS_VALUE).
+ *   - expectedExactValues : full list of values to match (used for EQUALS_EXACTLY).
+ */
 struct Rule {
-    RuleType type{};
-    std::string propertyName;
-    int expectedSize = 0;                 // for PROPERTY_SIZE
-    int expectedValue = 0;                // for CONTAINS_VALUE
-    std::vector<int> expectedExactValues; // for EQUALS_EXACTLY
+    RuleType type;                        // Type of the rule
+    std::string propertyName;             // Target property name
+    int expectedSize = 0;                 // For PROPERTY_SIZE
+    int expectedValue = 0;                // For CONTAINS_VALUE
+    std::vector<int> expectedExactValues; // For EQUALS_EXACTLY
+};
+
+/*
+ * Structure: ClassRule
+ * --------------------
+ * Represents a classification category (class) with a list of rules.
+ *
+ * Example:
+ *   "Blue" class might have one rule:
+ *       property "color" contains value 1
+ *
+ * Fields:
+ *   - className : the name of the class (e.g., "Blue", "Voluminous").
+ *   - rules     : the list of rules that must all be satisfied
+ *                 for a record to belong to this class.
+ */
+struct ClassRule {
+    std::string className;        // Name of the class
+    std::vector<Rule> rules;      // Rules defining this class
 };
