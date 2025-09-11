@@ -2,12 +2,22 @@
 #include <string>
 #include <vector>
 
-// Types of classification rules.
-enum class RuleType {
-    HAS_PROPERTY,    // has property "name"
-    PROPERTY_SIZE,   // property "name" has N values
-    CONTAINS_VALUE,  // property "name" contains value X
-    EQUALS_EXACTLY   // property "name" equals [a, b, c]
+/*
+ * Enum: RuleType
+ * --------------
+ * Defines the types of classification rules supported by the program.
+ *
+ * Possible values:
+ *   - HAS_PROPERTY    : checks if a record has a specific property.
+ *   - PROPERTY_SIZE   : checks if a property has a specific number of values.
+ *   - CONTAINS_VALUE  : checks if a property contains a specific integer value.
+ *   - EQUALS_EXACTLY  : checks if a property exactly matches a list of values.
+ */
+enum RuleType {
+    HAS_PROPERTY,
+    PROPERTY_SIZE,
+    CONTAINS_VALUE,
+    EQUALS_EXACTLY
 };
 
 // Single rule (feature) of a class.
