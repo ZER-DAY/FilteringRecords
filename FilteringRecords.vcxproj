@@ -19,16 +19,22 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Classifier.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Matching.cpp" />
     <ClCompile Include="Parser.cpp" />
+    <ClCompile Include="Record.cpp" />
+    <ClCompile Include="Validation.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Classifier.h" />
     <ClInclude Include="ClassRule.h" />
     <ClInclude Include="DataCheckResult.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="Property.h" />
     <ClInclude Include="Record.h" />
     <ClInclude Include="Rule.h" />
+    <ClInclude Include="Validation.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
