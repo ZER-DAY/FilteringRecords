@@ -18,6 +18,9 @@ std::string trim(const std::string& s) {
  * Function: parseIntList
  * ----------------------
  * Parses a list of integers inside square brackets.
+ *
+ * Example:
+ *   "[1, 2, 3]" → {1, 2, 3}
  */
 std::vector<int> parseIntList(const std::string& inside) {
     std::vector<int> result;
@@ -66,12 +69,12 @@ static bool parseOneRulePhrase(const std::string& phrase, Rule& ruleOut) {
         if (q1 != std::string::npos && q2 != std::string::npos) {
             ruleOut.propertyName = s.substr(q1 + 1, q2 - q1 - 1);
             std::stringstream ss(s.substr(q2 + 1));
+            std::string tmp;
             int n;
-            if (ss >> std::ws >> std::string("has") >> n) {
-                ruleOut.type = PROPERTY_SIZE;
-                ruleOut.expectedSize = n;
-                return true;
-            }
+            ss >> tmp >> n; // skip "has" and read integer
+            ruleOut.type = PROPERTY_SIZE;
+            ruleOut.expectedSize = n;
+            return true;
         }
     }
 
@@ -82,9 +85,9 @@ static bool parseOneRulePhrase(const std::string& phrase, Rule& ruleOut) {
         if (q1 != std::string::npos && q2 != std::string::npos) {
             ruleOut.propertyName = s.substr(q1 + 1, q2 - q1 - 1);
             std::stringstream ss(s.substr(q2 + 1));
-            std::string tmp;
+            std::string tmp1, tmp2;
             int val;
-            ss >> tmp >> val; // skip 'contains' and read value
+            ss >> tmp1 >> tmp2 >> val; // skip "contains value" and read integer
             ruleOut.type = CONTAINS_VALUE;
             ruleOut.expectedValue = val;
             return true;
@@ -112,6 +115,9 @@ static bool parseOneRulePhrase(const std::string& phrase, Rule& ruleOut) {
  * Function: parse_record_line
  * ---------------------------
  * Parses a record definition line from the input file.
+ *
+ * Example:
+ *   "Table: color = [1, 4], size = [20, 40], coating = [44]"
  */
 bool parse_record_line(const std::string& line, Record& rec) {
     auto pos = line.find(':');
