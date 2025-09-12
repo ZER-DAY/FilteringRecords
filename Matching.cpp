@@ -37,3 +37,25 @@ bool match_rule(const Record& record, const Rule& rule) {
     }
     return false;
 }
+
+/*
+ * Function: match_all_rules
+ * -------------------------
+ * Checks if a record satisfies all rules of a specific class.
+ *
+ * Parameters:
+ *   - record    : the record to check
+ *   - classRule : the class definition with multiple rules
+ *
+ * Returns:
+ *   true  if the record satisfies all rules,
+ *   false otherwise.
+ */
+bool match_all_rules(const Record& record, const ClassRule& classRule) {
+    for (const auto& rule : classRule.rules) {
+        if (!match_rule(record, rule)) {
+            return false; // one rule failed
+        }
+    }
+    return true;
+}
