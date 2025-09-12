@@ -1,42 +1,39 @@
 #include "Matching.h"
-#include <algorithm>
 
-namespace Matching {
+/*
+ * Function: match_rule
+ * --------------------
+ * Checks if a single record matches a single rule.
+ *
+ * Supported rule types:
+ *   - HAS_PROPERTY    : record must contain the property.
+ *   - PROPERTY_SIZE   : property must have exact number of values.
+ *   - CONTAINS_VALUE  : property must include a specific value.
+ *   - EQUALS_EXACTLY  : property values must match exactly the expected list.
+ */
+bool match_rule(const Record& record, const Rule& rule) {
+    auto it = record.properties.find(rule.propertyName);
+    if (it == record.properties.end()) {
+        return false; // property not found
+    }
 
-    // Check if a single record matches a single rule
-    bool match_rule(const Record& record, const Rule& rule) {
-        auto it = record.properties.find(rule.propertyName);
+    const Property& prop = it->second;
 
-        switch (rule.type) {
-        case RuleType::HAS_PROPERTY:
-            // Record must contain the property
-            return it != record.properties.end();
+    switch (rule.type) {
+    case HAS_PROPERTY:
+        return true; // property exists
 
-        case RuleType::PROPERTY_SIZE:
-            // Property must exist and have expected number of values
-            return it != record.properties.end() &&
-                static_cast<int>(it->second.values.size()) == rule.expectedSize;
+    case PROPERTY_SIZE:
+        return static_cast<int>(prop.values.size()) == rule.expectedSize;
 
-        case RuleType::CONTAINS_VALUE:
-            // Property must contain a specific value
-            if (it == record.properties.end()) return false;
-            return std::find(it->second.values.begin(),
-                it->second.values.end(),
-                rule.expectedValue) != it->second.values.end();
-
-        case RuleType::EQUALS_EXACTLY:
-            // Property values must exactly equal expected array
-            if (it == record.properties.end()) return false;
-            return it->second.values == rule.expectedExactValues;
+    case CONTAINS_VALUE:
+        for (int v : prop.values) {
+            if (v == rule.expectedValue) return true;
         }
         return false;
-    }
 
-    // Check if a record matches all rules of a class
-    bool match_all_rules(const Record& record, const ClassRule& classRule) {
-        for (const auto& ru : classRule.rules) {
-            if (!match_rule(record, ru)) return false;
-        }
-        return true;
+    case EQUALS_EXACTLY:
+        return prop.values == rule.expectedExactValues;
     }
+    return false;
 }
