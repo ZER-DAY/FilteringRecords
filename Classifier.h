@@ -19,7 +19,5 @@
  *     - key   = class name
  *     - value = list of record names that belong to this class
  */
-std::map<std::string, std::vector<std::string>> classify(
-    const std::vector<Record>& records,
-    const std::vector<ClassRule>& classRules
-);
+std::map<std::string, std::vector<std::string>>
+classify(const std::vector<Record>& records, const std::vector<ClassRule>& classRules);
