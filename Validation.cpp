@@ -1,45 +1,63 @@
 #include "Validation.h"
-#include <unordered_set>
+#include <set>
 
-// Error messages from specification
-static const char* ERR_NO_RECORDS = "No records found in input file";
-static const char* ERR_NO_CLASSES_OR_RULES = "No classes or rules found in input file";
-static const char* ERR_EMPTY_PROPS = "No properties defined for record";
-static const char* ERR_DUPLICATE_PROPERTY = "Duplicate property name detected";
+/*
+ * Function: validate_records
+ * --------------------------
+ * Validates all records to ensure they conform to the specification.
+ *
+ * Checks performed:
+ *   - At least one record must exist.
+ *   - Each record must have at least one property.
+ *   - No duplicate property names are allowed within the same record.
+ *
+ * Returns:
+ *   DataCheckResult with isCorrect = true if valid,
+ *   otherwise false with the corresponding error reason.
+ */
+DataCheckResult validate_records(const std::vector<Record>& records) {
+    // No records found
+    if (records.empty())
+        return { false, "No records found in input file" };
 
-namespace Validation {
+    for (const auto& rec : records) {
+        // Record must have at least one property
+        if (rec.properties.empty())
+            return { false, "No properties defined for record: " + rec.name };
 
-    // Validate records and class rules according to rules in Appendix A
-    DataCheckResult validate(const std::vector<Record>& records,
-        const std::vector<ClassRule>& classRules) {
-        DataCheckResult r;
-
-        // No records found
-        if (records.empty()) { r.isCorrect = false; r.reason = ERR_NO_RECORDS; return r; }
-        // No classes or rules found
-        if (classRules.empty()) { r.isCorrect = false; r.reason = ERR_NO_CLASSES_OR_RULES; return r; }
-
-        // Validate each record
-        for (const auto& rec : records) {
-            // Record must have at least one property
-            if (rec.properties.empty()) {
-                r.isCorrect = false; r.reason = ERR_EMPTY_PROPS; return r;
-            }
-            // Check for duplicate property names inside the same record
-            std::unordered_set<std::string> seen;
-            for (const auto& kv : rec.properties) {
-                if (!seen.insert(kv.first).second) {
-                    r.isCorrect = false; r.reason = ERR_DUPLICATE_PROPERTY; return r;
-                }
-            }
+        // Check for duplicate property names inside the same record
+        std::set<std::string> seen;
+        for (const auto& kv : rec.properties) {
+            if (seen.count(kv.first))
+                return { false, "Duplicate property name in record: " + rec.name };
+            seen.insert(kv.first);
         }
-
-        // Validate each class rule (must contain at least one rule)
-        for (const auto& cr : classRules) {
-            if (cr.rules.empty()) {
-                r.isCorrect = false; r.reason = ERR_NO_CLASSES_OR_RULES; return r;
-            }
-        }
-        return r; // Valid input
     }
+    return { true, "" }; // Valid records
+}
+
+/*
+ * Function: validate_classes
+ * --------------------------
+ * Validates all class rules to ensure they conform to the specification.
+ *
+ * Checks performed:
+ *   - At least one class must exist.
+ *   - Each class must contain at least one rule.
+ *
+ * Returns:
+ *   DataCheckResult with isCorrect = true if valid,
+ *   otherwise false with the corresponding error reason.
+ */
+DataCheckResult validate_classes(const std::vector<ClassRule>& classes) {
+    // No classes or rules found
+    if (classes.empty())
+        return { false, "No classes or rules found in input file" };
+
+    for (const auto& cl : classes) {
+        // Each class must contain at least one rule
+        if (cl.rules.empty())
+            return { false, "Class " + cl.className + " has no rules" };
+    }
+    return { true, "" }; // Valid classes
 }
