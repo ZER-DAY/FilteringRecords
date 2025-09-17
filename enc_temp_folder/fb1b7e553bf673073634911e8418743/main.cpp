@@ -136,7 +136,7 @@ int main() {
         }
     }
     cout << CYAN << "-------------------------------" << RESET << "\n";
-    cout << GREEN << "Classification completed successfully!" << RESET << "\n";
+    cout << GREEN << "✅ Classification completed successfully!" << RESET << "\n";
 
     // Ask if user wants to save results
     cout << YELLOW << "\nDo you want to save results to a file? (y/n): " << RESET;
