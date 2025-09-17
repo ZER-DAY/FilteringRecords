@@ -1,8 +1,0 @@
-Phone: brand = [1], color = [2], storage = [128]
-Laptop: brand = [2], color = [3], ram = [16], storage = [512]
-Tablet: brand = [1], color = [2, 3], storage = [256]
-
-Has storage: has property "storage"
-High RAM: property "ram" contains value 16
-Blue device: property "color" contains value 2
-Apple device: property "brand" = [1]
