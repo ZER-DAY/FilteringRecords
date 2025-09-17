@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
@@ -10,32 +10,56 @@
 
 using namespace std;
 
-/*
- * Program: RecordClassifier
- * -------------------------
- * Console program for classifying records based on a set of rules.
- *
- * Steps:
- *   1. Read records and class rules from input file.
- *   2. Validate input data (records and rules).
- *   3. Perform classification.
- *   4. Print results to standard output.
- *
- * Usage:
- *   RecordClassifier.exe input.txt
- * If no file is provided, the program will try to open "input.txt".
- */
+// ANSI Colors
+#define RESET   "\033[0m"
+#define RED     "\033[31m"
+#define GREEN   "\033[32m"
+#define YELLOW  "\033[33m"
+#define CYAN    "\033[36m"
 
-int main(int argc, char* argv[]) {
-    // Step 1. Determine input file
-    string filename = "input.txt";
-    if (argc > 1) {
-        filename = argv[1];
+void print_help() {
+    cout << CYAN << "=====================================\n";
+    cout << "   RecordClassifier - Help Guide\n";
+    cout << "=====================================" << RESET << "\n\n";
+
+    cout << YELLOW << "Input File Format:" << RESET << "\n";
+    cout << "  Records section:\n";
+    cout << "    <RecordName>: <property1> = [values], <property2> = [values]\n";
+    cout << "  Example:\n";
+    cout << "    Car: color = [2], doors = [4], engine = [2000]\n\n";
+
+    cout << "  Class rules section (after empty line):\n";
+    cout << "    Supported patterns:\n";
+    cout << "      - has property \"name\"\n";
+    cout << "      - property \"name\" has N values\n";
+    cout << "      - property \"name\" contains value X\n";
+    cout << "      - property \"name\" = [a, b, c]\n\n";
+
+    cout << GREEN << "Example Run:" << RESET << "\n";
+    cout << "  Provide an input file when asked (e.g., input.txt)\n";
+}
+
+int main() {
+    cout << CYAN << "=====================================\n";
+    cout << "     RecordClassifier - v1.1\n";
+    cout << "   Classification Based on Rules\n";
+    cout << "=====================================" << RESET << "\n";
+
+    // Ask user for input
+    string filename;
+    cout << YELLOW << "\nEnter input file name (or -h for help): " << RESET;
+    cin >> filename;
+
+    if (filename == "-h" || filename == "--help") {
+        print_help();
+        system("pause");
+        return 0;
     }
 
     ifstream fin(filename);
     if (!fin) {
-        cerr << "Cannot open the file: " << filename << "\n";
+        cerr << RED << "\n[ERROR] Cannot open the file: " << filename << RESET << "\n";
+        system("pause");
         return 1;
     }
 
@@ -43,6 +67,8 @@ int main(int argc, char* argv[]) {
     vector<ClassRule> classes;
     string line;
     bool readingRecords = true;
+
+    cout << YELLOW << "\n[INFO] Reading input file: " << filename << "..." << RESET << "\n";
 
     while (getline(fin, line)) {
         string clean = trim(line);
@@ -54,7 +80,9 @@ int main(int argc, char* argv[]) {
         if (readingRecords) {
             Record r;
             if (!parse_record_line(clean, r)) {
-                cerr << "Syntax error in record definition: " << clean << "\n";
+                cerr << RED << "\n[ERROR] Syntax error in record definition:\n  "
+                    << clean << RESET << "\n";
+                system("pause");
                 return 1;
             }
             records.push_back(r);
@@ -62,43 +90,84 @@ int main(int argc, char* argv[]) {
         else {
             ClassRule cr;
             if (!parse_class_line(clean, cr)) {
-                cerr << "Syntax error in class rule definition: " << clean << "\n";
+                cerr << RED << "\n[ERROR] Syntax error in class rule definition:\n  "
+                    << clean << RESET << "\n";
+                system("pause");
                 return 1;
             }
             classes.push_back(cr);
         }
     }
 
-    // Step 2. Validate input
+    // Validation
     DataCheckResult recCheck = validate_records(records);
     if (!recCheck.isCorrect) {
-        cerr << recCheck.reason << "\n";
+        cerr << RED << "\n[ERROR] " << recCheck.reason << RESET << "\n";
+        system("pause");
         return 1;
     }
 
     DataCheckResult clsCheck = validate_classes(classes);
     if (!clsCheck.isCorrect) {
-        cerr << clsCheck.reason << "\n";
+        cerr << RED << "\n[ERROR] " << clsCheck.reason << RESET << "\n";
+        system("pause");
         return 1;
     }
 
-    // Step 3. Perform classification
+    cout << GREEN << "[OK] Validation successful. Starting classification..." << RESET << "\n";
+
+    // Classification
     auto result = classify(records, classes);
 
-    // Step 4. Print results
+    // Output results
+    cout << CYAN << "\n--- Classification Results ---" << RESET << "\n";
     for (auto& c : classes) {
         cout << c.className << ": ";
         if (result[c.className].empty()) {
-            cout << "-\n";
+            cout << RED << "-" << RESET << "\n";
         }
         else {
+            cout << GREEN;
             for (size_t i = 0; i < result[c.className].size(); i++) {
                 cout << result[c.className][i];
                 if (i + 1 < result[c.className].size()) cout << ", ";
             }
-            cout << "\n";
+            cout << RESET << "\n";
+        }
+    }
+    cout << CYAN << "-------------------------------" << RESET << "\n";
+    cout << GREEN << "✅ Classification completed successfully!" << RESET << "\n";
+
+    // Ask if user wants to save results
+    cout << YELLOW << "\nDo you want to save results to a file? (y/n): " << RESET;
+    char choice;
+    cin >> choice;
+    if (choice == 'y' || choice == 'Y') {
+        string outFile;
+        cout << YELLOW << "Enter output file name: " << RESET;
+        cin >> outFile;
+        ofstream fout(outFile);
+        if (!fout) {
+            cerr << RED << "[ERROR] Cannot create file: " << outFile << RESET << "\n";
+        }
+        else {
+            for (auto& c : classes) {
+                fout << c.className << ": ";
+                if (result[c.className].empty()) {
+                    fout << "-\n";
+                }
+                else {
+                    for (size_t i = 0; i < result[c.className].size(); i++) {
+                        fout << result[c.className][i];
+                        if (i + 1 < result[c.className].size()) fout << ", ";
+                    }
+                    fout << "\n";
+                }
+            }
+            cout << GREEN << "[OK] Results saved to " << outFile << RESET << "\n";
         }
     }
 
+    system("pause");
     return 0;
 }
