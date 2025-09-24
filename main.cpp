@@ -48,7 +48,7 @@ void print_help() {
 int main() {
     cout << CYAN << "=====================================\n";
     cout << "     RecordClassifier - v2.1\n";
-    cout << "   Items + Rules → Output\n";
+    cout << "   Items + Rules -> Output\n";
     cout << "=====================================" << RESET << "\n";
 
     // Ask if user wants help
