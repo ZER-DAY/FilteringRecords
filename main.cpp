@@ -23,9 +23,9 @@ void print_help() {
     cout << "=====================================" << RESET << "\n\n";
 
     cout << YELLOW << "Required Files:" << RESET << "\n";
-    cout << "  1. items.txt  → list of records\n";
-    cout << "  2. rules.txt  → list of classification rules\n";
-    cout << "  3. output.txt → results will be saved here\n\n";
+    cout << "  1. items.txt  -> list of records\n";
+    cout << "  2. rules.txt  -> list of classification rules\n";
+    cout << "  3. output.txt -> results will be saved here\n\n";
 
     cout << YELLOW << "items.txt format:" << RESET << "\n";
     cout << "  <RecordName>: <property1> = [values], <property2> = [values]\n";
@@ -55,7 +55,8 @@ int main() {
     cout << YELLOW << "\nPress 'h' for help, or Enter to continue: " << RESET;
     string userChoice;
     getline(cin, userChoice);
-    if (userChoice == "h" || userChoice == "H") {
+	// || userChoice == "H" IF you want to accept uppercase 'H'
+    if (userChoice == "h") {
         print_help();
         system("pause");
         return 0;
