@@ -157,6 +157,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ClassifyTests.cpp" />
     <ClCompile Include="FilteringRecordsTests.cpp" />
     <ClCompile Include="ParseRecordLineTests.cpp" />
     <ClCompile Include="pch.cpp">

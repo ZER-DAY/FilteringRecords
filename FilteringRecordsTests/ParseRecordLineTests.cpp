@@ -1,8 +1,8 @@
 ﻿#include "pch.h"
 #include "CppUnitTest.h"
 
-#include "../../FilteringRecords/Record.h"//"../FilteringRecords/Record.h"
-#include "../../FilteringRecords/Parser.h"   // где реализована parse_record_line
+#include "../Record.h"   //"../FilteringRecords/Record.h"
+#include "../Parser.h"   // где реализована parse_record_line
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
