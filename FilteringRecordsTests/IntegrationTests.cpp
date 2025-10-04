@@ -28,7 +28,7 @@ using namespace std;
  *   4. Output file is correctly generated.
  */
 
-namespace IntegrationTests
+namespace Tests
 {
     TEST_CLASS(IntegrationTests)
     {
@@ -114,7 +114,7 @@ namespace IntegrationTests
             Assert::IsTrue(fs_exists(outputFile.c_str()), L"Output file was not created");
             remove("test_items.txt");
             remove("test_rules.txt");
-            remove("test_output.txt");
+            remove("test_output.txt"););
         }
 
         TEST_METHOD(Fail_MissingFiles)
@@ -155,7 +155,9 @@ namespace IntegrationTests
             fin_items.close();
             fin_rules.close();
 
-    
+            // Cleanup
+            fs::remove("bad_items.txt");
+            fs::remove("bad_rules.txt");
         }
     };
 }
