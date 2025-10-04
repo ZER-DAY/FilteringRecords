@@ -6,7 +6,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace RecordClassifierTests
+namespace ParseRecordLineTests
 {
     TEST_CLASS(ParseRecordLineTests)
     {

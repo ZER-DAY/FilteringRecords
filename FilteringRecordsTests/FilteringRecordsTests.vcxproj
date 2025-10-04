@@ -159,6 +159,8 @@
   <ItemGroup>
     <ClCompile Include="ClassifyTests.cpp" />
     <ClCompile Include="FilteringRecordsTests.cpp" />
+    <ClCompile Include="IntegrationTests.cpp" />
+    <ClCompile Include="ParseClassLineTests.cpp" />
     <ClCompile Include="ParseRecordLineTests.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -166,6 +168,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TrimTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

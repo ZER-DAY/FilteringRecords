@@ -7,7 +7,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace Tests
+namespace RecordClassifierTests
 {
     TEST_CLASS(RecordClassifierTests)
     {
