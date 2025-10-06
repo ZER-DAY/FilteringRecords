@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include <CppUnitTest.h>
 #include "../Rule.h"
 #include "../Parser.h"

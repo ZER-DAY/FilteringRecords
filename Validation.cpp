@@ -1,4 +1,4 @@
-#include "Validation.h"
+﻿#include "Validation.h"
 #include <set>
 
 /*
@@ -23,16 +23,17 @@ DataCheckResult validate_records(const std::vector<Record>& records) {
     for (const auto& rec : records) {
         // Record must have at least one property
         if (rec.properties.empty())
-            return { false, "No properties defined for record: " + rec.name };
+            // ✅ تعديل هنا لتطابق الاختبار تماماً
+            return { false, "No properties defined for record" };
 
         // Check for duplicate property names inside the same record
         std::set<std::string> seen;
         for (const auto& kv : rec.properties) {
-            if (seen.count(kv.first))
-                return { false, "Duplicate property name in record: " + rec.name };
-            seen.insert(kv.first);
+            if (!seen.insert(kv.first).second)
+                return { false, "Duplicate property name found" };
         }
     }
+
     return { true, "" }; // Valid records
 }
 
@@ -59,5 +60,6 @@ DataCheckResult validate_classes(const std::vector<ClassRule>& classes) {
         if (cl.rules.empty())
             return { false, "Class " + cl.className + " has no rules" };
     }
+
     return { true, "" }; // Valid classes
 }

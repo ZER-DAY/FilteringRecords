@@ -12,7 +12,7 @@ using namespace std;
  * leading and trailing spaces and tabs from strings.
  */
 
-namespace Tests
+namespace TrimTests
 {
     TEST_CLASS(TrimTests)
     {
