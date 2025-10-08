@@ -1,4 +1,0 @@
-With coating: has property "coating"
-Voluminous: property "size" has 3 values
-Blue: property "color" contains value 1
-Matte: property "coating" = [44, 21]

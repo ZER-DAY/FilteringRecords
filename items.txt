@@ -1,2 +1,0 @@
-Wardrobe: color = [1, 2], size = [10, 40, 60]
-Table: color = [1, 4], size = [20, 40], coating = [44]

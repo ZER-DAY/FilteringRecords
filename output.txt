@@ -1,4 +1,0 @@
-With coating: Table
-Voluminous: Wardrobe
-Blue: Wardrobe, Table
-Matte: -
