@@ -1,6 +1,7 @@
 ﻿#include "Parser.h"
 #include <sstream>
 #include <cctype>
+#include <algorithm>
 
 /*
  * Function: trim
@@ -61,9 +62,11 @@ bool parse_record_line(const std::string& line, Record& rec) {
     if (colon == std::string::npos) return false;
 
     rec.name = trim(line.substr(0, colon));
-    std::string propsPart = trim(line.substr(colon + 1));
+    if (rec.name.empty()) {
+        return false; // ❌ reject empty record name
+    }
 
-    // ✅ no properties after colon
+    std::string propsPart = trim(line.substr(colon + 1));
     if (propsPart.empty()) return false;
 
     std::vector<std::string> chunks;
@@ -94,26 +97,28 @@ bool parse_record_line(const std::string& line, Record& rec) {
         if (eq == std::string::npos) return false;
 
         std::string pname = trim(token.substr(0, eq));
-        std::string val = trim(token.substr(eq + 1));
+        // 🧠 convert property name to lowercase
+        std::transform(pname.begin(), pname.end(), pname.begin(),
+            [](unsigned char c) { return std::tolower(c); });
 
+        std::string val = trim(token.substr(eq + 1));
         if (val.size() < 2 || val.front() != '[' || val.back() != ']')
             return false;
 
         std::string inside = val.substr(1, val.size() - 2);
         Property p{ pname, parseIntList(inside) };
 
-        // ✅ reject duplicate property
+        // ❌ reject duplicate property (case-insensitive)
         if (rec.properties.count(pname))
             return false;
 
-        // ✅ reject non-numeric values (parseIntList failed)
+        // ❌ reject non-numeric values
         if (!inside.empty() && p.values.empty())
             return false;
 
         rec.properties[pname] = p;
     }
 
-    // ✅ record must contain at least one property
     return !rec.properties.empty();
 }
 
@@ -127,9 +132,6 @@ bool parse_record_line(const std::string& line, Record& rec) {
  *   - property "name" has N values
  *   - property "name" contains value X
  *   - property "name" = [a, b, c]
- *
- * Example:
- *   "Blue: property \"color\" contains value 1"
  */
 bool parse_class_line(const std::string& line, ClassRule& cr) {
     size_t colon = line.find(':');
@@ -138,7 +140,7 @@ bool parse_class_line(const std::string& line, ClassRule& cr) {
     cr.className = trim(line.substr(0, colon));
     std::string desc = trim(line.substr(colon + 1));
 
-    // ✅ reject empty class name
+    // ❌ reject empty class name
     if (cr.className.empty())
         return false;
 
@@ -164,18 +166,25 @@ bool parse_class_line(const std::string& line, ClassRule& cr) {
                 break;
             }
     }
-    // CONTAINS_VALUE
+    // CONTAINS_VALUE  strict check
     else if (desc.find("contains value") != std::string::npos || desc.find("содержит значение") != std::string::npos) {
         r.type = CONTAINS_VALUE;
         size_t q1 = desc.find("\""), q2 = desc.find_last_of("\"");
         if (q1 == std::string::npos || q2 == std::string::npos || q2 <= q1) return false;
         r.propertyName = desc.substr(q1 + 1, q2 - q1 - 1);
 
-        for (size_t i = 0; i < desc.size(); i++)
-            if (isdigit((unsigned char)desc[i])) {
-                r.expectedValue = stoi(desc.substr(i));
-                break;
-            }
+        size_t pos = desc.find("value");
+        if (pos == std::string::npos) return false;
+
+        std::string afterValue = trim(desc.substr(pos + 5));
+        if (afterValue.empty()) return false;
+
+        //  تحقق من أن القيمة رقمية فقط
+        for (char c : afterValue) {
+            if (!isdigit((unsigned char)c) && c != ' ') return false;
+        }
+
+        r.expectedValue = stoi(afterValue);
     }
     // EQUALS_EXACTLY
     else if (desc.find("=") != std::string::npos && desc.find("[") != std::string::npos) {
