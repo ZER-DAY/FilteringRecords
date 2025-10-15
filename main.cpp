@@ -7,7 +7,8 @@
 #include "Parser.h"
 #include "Classifier.h"
 #include "Validation.h"
-
+#include "Error.h"
+#include <set>
 using namespace std;
 
 #define RESET   "\033[0m"
@@ -93,17 +94,28 @@ int main(int argc, char* argv[]) {
         records.push_back(r);
     }
 
-    // --- Parse rules ---
+    std::set<Error> errors;
+
+    // Parse rules
     vector<ClassRule> classes;
     while (getline(rules, line)) {
         string clean = trim(line);
         if (clean.empty()) continue;
 
         ClassRule cr;
-        if (!parse_class_line(clean, cr)) {
+        // التعديل هنا 👇
+        if (!parse_class_line(clean, cr, errors)) {
             cerr << RED << "[ERROR] Invalid rule format: " << clean << RESET << endl;
+
+            // ✅ اطبع كل الأخطاء المجمّعة
+            for (const auto& e : errors) {
+                cerr << RED << "  -> (" << e.code << ") " << e.message
+                    << " [" << e.source << "]" << RESET << endl;
+            }
+
             return 1;
         }
+
         classes.push_back(cr);
     }
 

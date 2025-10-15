@@ -3,7 +3,8 @@
 #include <vector>
 #include "Record.h"
 #include "Rule.h"
-
+#include "Error.h"
+#include <set>
 /*
  * Function: trim
  * --------------
@@ -38,4 +39,4 @@ bool parse_record_line(const std::string& line, Record& rec);
  *   true  if the line is valid and parsed successfully,
  *   false otherwise.
  */
-bool parse_class_line(const std::string& line, ClassRule& cr);
+bool parse_class_line(const std::string& line, ClassRule& cr, std::set<Error>& errors);

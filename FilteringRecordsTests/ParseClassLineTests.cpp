@@ -2,6 +2,8 @@
 #include <CppUnitTest.h>
 #include "../Rule.h"
 #include "../Parser.h"
+#include "../Error.h"
+#include <set>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace std;
@@ -15,7 +17,7 @@ using namespace std;
  *  - property "name" has N values
  *  - property "name" contains value X
  *  - property "name" = [a, b, c]
- *  - and various invalid/edge cases
+ * Also checks that parsing errors are properly collected in std::set<Error>.
  */
 
 namespace ParseClassLineTests
@@ -28,8 +30,11 @@ namespace ParseClassLineTests
         TEST_METHOD(HasProperty_ShouldParse)
         {
             ClassRule rule;
-            bool ok = parse_class_line("With coating: has property \"coating\"", rule);
+            std::set<Error> errors;
+            bool ok = parse_class_line("With coating: has property \"coating\"", rule, errors);
+
             Assert::IsTrue(ok);
+            Assert::AreEqual(size_t(0), errors.size());
             Assert::AreEqual("With coating"s, rule.className);
             Assert::AreEqual("coating"s, rule.rules[0].propertyName);
             Assert::AreEqual((int)RuleType::HAS_PROPERTY, (int)rule.rules[0].type);
@@ -39,8 +44,11 @@ namespace ParseClassLineTests
         TEST_METHOD(PropertySize_ShouldParse)
         {
             ClassRule rule;
-            bool ok = parse_class_line("Voluminous: property \"size\" has 3 values", rule);
+            std::set<Error> errors;
+            bool ok = parse_class_line("Voluminous: property \"size\" has 3 values", rule, errors);
+
             Assert::IsTrue(ok);
+            Assert::AreEqual(size_t(0), errors.size());
             Assert::AreEqual("Voluminous"s, rule.className);
             Assert::AreEqual("size"s, rule.rules[0].propertyName);
             Assert::AreEqual(3, rule.rules[0].expectedSize);
@@ -50,8 +58,11 @@ namespace ParseClassLineTests
         TEST_METHOD(ContainsValue_ShouldParse)
         {
             ClassRule rule;
-            bool ok = parse_class_line("Blue: property \"color\" contains value 1", rule);
+            std::set<Error> errors;
+            bool ok = parse_class_line("Blue: property \"color\" contains value 1", rule, errors);
+
             Assert::IsTrue(ok);
+            Assert::AreEqual(size_t(0), errors.size());
             Assert::AreEqual("Blue"s, rule.className);
             Assert::AreEqual("color"s, rule.rules[0].propertyName);
             Assert::AreEqual(1, rule.rules[0].expectedValue);
@@ -61,112 +72,151 @@ namespace ParseClassLineTests
         TEST_METHOD(EqualsExactly_ShouldParse)
         {
             ClassRule rule;
-            bool ok = parse_class_line("Matte: property \"coating\" = [44, 21]", rule);
+            std::set<Error> errors;
+            bool ok = parse_class_line("Matte: property \"coating\" = [44, 21]", rule, errors);
+
             Assert::IsTrue(ok);
+            Assert::AreEqual(size_t(0), errors.size());
             Assert::AreEqual("Matte"s, rule.className);
             Assert::AreEqual("coating"s, rule.rules[0].propertyName);
             Assert::AreEqual((int)RuleType::EQUALS_EXACTLY, (int)rule.rules[0].type);
             Assert::AreEqual(2, (int)rule.rules[0].expectedExactValues.size());
         }
 
-        // 5. Ошибочный формат
+        // 5. Invalid syntax
         TEST_METHOD(Invalid_Syntax_ShouldFail)
         {
             ClassRule rule;
-            bool ok = parse_class_line("Class: if \"size\" = number", rule);
+            std::set<Error> errors;
+            bool ok = parse_class_line("Class: if \"size\" = number", rule, errors);
+
             Assert::IsFalse(ok);
+            Assert::IsTrue(errors.size() > 0);
         }
 
-        // 6. Пробелы внутри
+        // 6. Spaces inside
         TEST_METHOD(SpacesInside_ShouldWork)
         {
             ClassRule rule;
-            bool ok = parse_class_line("Green : property \"color\" contains value 2", rule);
+            std::set<Error> errors;
+            bool ok = parse_class_line("Green : property \"color\" contains value 2", rule, errors);
+
             Assert::IsTrue(ok);
+            Assert::AreEqual(size_t(0), errors.size());
             Assert::AreEqual("Green"s, rule.className);
             Assert::AreEqual("color"s, rule.rules[0].propertyName);
             Assert::AreEqual(2, rule.rules[0].expectedValue);
         }
 
-        // 7. Пустое имя класса
+        // 7. Empty class name
         TEST_METHOD(Empty_ClassName_ShouldFail)
         {
             ClassRule rule;
-            bool ok = parse_class_line(": has property \"x\"", rule);
+            std::set<Error> errors;
+            bool ok = parse_class_line(": has property \"x\"", rule, errors);
+
             Assert::IsFalse(ok);
+            Assert::IsTrue(errors.size() > 0);
         }
 
-        // 8. Отсутствуют скобки в EQUALS_EXACTLY
+        // 8. Missing brackets
         TEST_METHOD(MissingBrackets_EqualsExactly_ShouldFail)
         {
             ClassRule rule;
-            bool ok = parse_class_line("Matte: property \"coating\" = 44, 21", rule);
+            std::set<Error> errors;
+            bool ok = parse_class_line("Matte: property \"coating\" = 44, 21", rule, errors);
+
             Assert::IsFalse(ok);
+            Assert::IsTrue(errors.size() > 0);
         }
 
-        // 9. Текст вместо числа в CONTAINS_VALUE
+        // 9. Invalid value (non-numeric)
         TEST_METHOD(InvalidValueText_ShouldFail)
         {
             ClassRule rule;
-            bool ok = parse_class_line("Blue: property \"color\" contains value X", rule);
+            std::set<Error> errors;
+            bool ok = parse_class_line("Blue: property \"color\" contains value X", rule, errors);
+
             Assert::IsFalse(ok);
+            Assert::IsTrue(errors.size() > 0);
         }
 
-        // 10. Пропущены кавычки
+        // 10. Missing quotes
         TEST_METHOD(MissingQuotes_ShouldFail)
         {
             ClassRule rule;
-            bool ok = parse_class_line("Red: property color contains value 1", rule);
+            std::set<Error> errors;
+            bool ok = parse_class_line("Red: property color contains value 1", rule, errors);
+
             Assert::IsFalse(ok);
+            Assert::IsTrue(errors.size() > 0);
         }
 
-        // 11. Несуществующий тип правила
+        // 11. Unknown rule type
         TEST_METHOD(UnknownRuleType_ShouldFail)
         {
             ClassRule rule;
-            bool ok = parse_class_line("Orange: property \"a\" something else", rule);
+            std::set<Error> errors;
+            bool ok = parse_class_line("Orange: property \"a\" something else", rule, errors);
+
             Assert::IsFalse(ok);
+            Assert::IsTrue(errors.size() > 0);
         }
 
-        // 12. Лишние пробелы
+        // 12. Extra spaces
         TEST_METHOD(ExtraSpaces_ShouldWork)
         {
             ClassRule rule;
-            bool ok = parse_class_line("Green: property \"color\" contains value 2", rule);
+            std::set<Error> errors;
+            bool ok = parse_class_line("Green: property \"color\" contains value 2", rule, errors);
+
             Assert::IsTrue(ok);
+            Assert::AreEqual(size_t(0), errors.size());
             Assert::AreEqual("Green"s, rule.className);
         }
 
-        // 13. Пропущены скобки (повтор 8)
+        // 13. Missing brackets again
         TEST_METHOD(MissingBrackets2_EqualsExactly_ShouldFail)
         {
             ClassRule rule;
-            bool ok = parse_class_line("Matte: property \"coating\" = 44, 21", rule);
+            std::set<Error> errors;
+            bool ok = parse_class_line("Matte: property \"coating\" = 44, 21", rule, errors);
+
             Assert::IsFalse(ok);
+            Assert::IsTrue(errors.size() > 0);
         }
 
-        // 14. Текст вместо числа (повтор 9)
+        // 14. Text instead of number again
         TEST_METHOD(InvalidValueText2_ShouldFail)
         {
             ClassRule rule;
-            bool ok = parse_class_line("Blue: property \"color\" contains value XX", rule);
+            std::set<Error> errors;
+            bool ok = parse_class_line("Blue: property \"color\" contains value XX", rule, errors);
+
             Assert::IsFalse(ok);
+            Assert::IsTrue(errors.size() > 0);
         }
 
-        // 15. Пропущены кавычки (многострочный)
+        // 15. Missing quotes again
         TEST_METHOD(MissingQuotes2_ShouldFail)
         {
             ClassRule rule;
-            bool ok = parse_class_line("Red: property color contains value 1", rule);
+            std::set<Error> errors;
+            bool ok = parse_class_line("Red: property color contains value 1", rule, errors);
+
             Assert::IsFalse(ok);
+            Assert::IsTrue(errors.size() > 0);
         }
 
-        // 16. Лишние пробелы в начале и конце
+        // 16. Spaces around
         TEST_METHOD(SpacesAround_ShouldWork)
         {
             ClassRule rule;
-            bool ok = parse_class_line(" Green: property \"color\" contains value 2 ", rule);
+            std::set<Error> errors;
+            bool ok = parse_class_line(" Green: property \"color\" contains value 2 ", rule, errors);
+
             Assert::IsTrue(ok);
+            Assert::AreEqual(size_t(0), errors.size());
             Assert::AreEqual("Green"s, rule.className);
         }
     };

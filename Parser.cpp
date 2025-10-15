@@ -1,7 +1,9 @@
 ﻿#include "Parser.h"
+#include "Error.h"
 #include <sstream>
 #include <cctype>
 #include <algorithm>
+#include <set>
 
 /*
  * Function: trim
@@ -97,7 +99,6 @@ bool parse_record_line(const std::string& line, Record& rec) {
         if (eq == std::string::npos) return false;
 
         std::string pname = trim(token.substr(0, eq));
-        // 🧠 convert property name to lowercase
         std::transform(pname.begin(), pname.end(), pname.begin(),
             [](unsigned char c) { return std::tolower(c); });
 
@@ -132,17 +133,23 @@ bool parse_record_line(const std::string& line, Record& rec) {
  *   - property "name" has N values
  *   - property "name" contains value X
  *   - property "name" = [a, b, c]
+ *
+ * This version includes error tracking through std::set<Error>& errors
  */
-bool parse_class_line(const std::string& line, ClassRule& cr) {
+bool parse_class_line(const std::string& line, ClassRule& cr, std::set<Error>& errors) {
     size_t colon = line.find(':');
-    if (colon == std::string::npos) return false;
+    if (colon == std::string::npos) {
+        errors.insert({ 1, "Missing ':' separator in class definition", "Parser" });
+        return false;
+    }
 
     cr.className = trim(line.substr(0, colon));
     std::string desc = trim(line.substr(colon + 1));
 
-    // ❌ reject empty class name
-    if (cr.className.empty())
+    if (cr.className.empty()) {
+        errors.insert({ 2, "Empty class name", "Parser" });
         return false;
+    }
 
     Rule r;
 
@@ -150,14 +157,20 @@ bool parse_class_line(const std::string& line, ClassRule& cr) {
     if (desc.find("has property") != std::string::npos || desc.find("есть свойство") != std::string::npos) {
         r.type = HAS_PROPERTY;
         size_t q1 = desc.find("\""), q2 = desc.find_last_of("\"");
-        if (q1 == std::string::npos || q2 == std::string::npos || q2 <= q1) return false;
+        if (q1 == std::string::npos || q2 == std::string::npos || q2 <= q1) {
+            errors.insert({ 3, "Invalid quotes in 'has property' rule", "Parser" });
+            return false;
+        }
         r.propertyName = desc.substr(q1 + 1, q2 - q1 - 1);
     }
     // PROPERTY_SIZE
     else if (desc.find("has") != std::string::npos && desc.find("values") != std::string::npos) {
         r.type = PROPERTY_SIZE;
         size_t q1 = desc.find("\""), q2 = desc.find_last_of("\"");
-        if (q1 == std::string::npos || q2 == std::string::npos || q2 <= q1) return false;
+        if (q1 == std::string::npos || q2 == std::string::npos || q2 <= q1) {
+            errors.insert({ 4, "Invalid property format in 'has N values' rule", "Parser" });
+            return false;
+        }
         r.propertyName = desc.substr(q1 + 1, q2 - q1 - 1);
 
         for (size_t i = 0; i < desc.size(); i++)
@@ -165,24 +178,39 @@ bool parse_class_line(const std::string& line, ClassRule& cr) {
                 r.expectedSize = stoi(desc.substr(i));
                 break;
             }
+
+        if (r.expectedSize <= 0) {
+            errors.insert({ 5, "Missing numeric value in 'has N values' rule", "Parser" });
+            return false;
+        }
     }
-    // CONTAINS_VALUE  strict check
+    // CONTAINS_VALUE
     else if (desc.find("contains value") != std::string::npos || desc.find("содержит значение") != std::string::npos) {
         r.type = CONTAINS_VALUE;
         size_t q1 = desc.find("\""), q2 = desc.find_last_of("\"");
-        if (q1 == std::string::npos || q2 == std::string::npos || q2 <= q1) return false;
+        if (q1 == std::string::npos || q2 == std::string::npos || q2 <= q1) {
+            errors.insert({ 6, "Invalid quotes in 'contains value' rule", "Parser" });
+            return false;
+        }
         r.propertyName = desc.substr(q1 + 1, q2 - q1 - 1);
 
         size_t pos = desc.find("value");
-        if (pos == std::string::npos) return false;
+        if (pos == std::string::npos) {
+            errors.insert({ 7, "Missing keyword 'value' in rule", "Parser" });
+            return false;
+        }
 
         std::string afterValue = trim(desc.substr(pos + 5));
-        if (afterValue.empty()) return false;
-
-        //  تحقق من أن القيمة رقمية فقط
-        for (char c : afterValue) {
-            if (!isdigit((unsigned char)c) && c != ' ') return false;
+        if (afterValue.empty()) {
+            errors.insert({ 8, "No numeric value after 'value' keyword", "Parser" });
+            return false;
         }
+
+        for (char c : afterValue)
+            if (!isdigit((unsigned char)c) && c != ' ') {
+                errors.insert({ 9, "Non-numeric characters found after 'value'", "Parser" });
+                return false;
+            }
 
         r.expectedValue = stoi(afterValue);
     }
@@ -190,14 +218,21 @@ bool parse_class_line(const std::string& line, ClassRule& cr) {
     else if (desc.find("=") != std::string::npos && desc.find("[") != std::string::npos) {
         r.type = EQUALS_EXACTLY;
         size_t q1 = desc.find("\""), q2 = desc.find_last_of("\"");
-        if (q1 == std::string::npos || q2 == std::string::npos || q2 <= q1) return false;
+        if (q1 == std::string::npos || q2 == std::string::npos || q2 <= q1) {
+            errors.insert({ 10, "Invalid quotes in '=' rule", "Parser" });
+            return false;
+        }
         r.propertyName = desc.substr(q1 + 1, q2 - q1 - 1);
         size_t lb = desc.find("["), rb = desc.find("]");
-        if (lb == std::string::npos || rb == std::string::npos || rb <= lb) return false;
+        if (lb == std::string::npos || rb == std::string::npos || rb <= lb) {
+            errors.insert({ 11, "Invalid bracket structure in '=' rule", "Parser" });
+            return false;
+        }
         std::string inside = desc.substr(lb + 1, rb - lb - 1);
         r.expectedExactValues = parseIntList(inside);
     }
     else {
+        errors.insert({ 12, "Unrecognized class rule format", "Parser" });
         return false;
     }
 

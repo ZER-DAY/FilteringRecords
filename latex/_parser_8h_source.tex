@@ -1,0 +1,46 @@
+\doxysection{Parser.\+h}
+\hypertarget{_parser_8h_source}{}\label{_parser_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}Record.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}Rule.h"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00008\ \textcolor{comment}{\ *\ Function:\ trim}}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ *\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ *\ Removes\ leading\ and\ trailing\ whitespace\ characters\ from\ a\ string.}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00012\ std::string\ trim(\textcolor{keyword}{const}\ std::string\&\ s);}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ *\ Function:\ parseIntList}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ *\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ *\ Parses\ a\ list\ of\ integers\ inside\ square\ brackets.}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00019\ std::vector<int>\ parseIntList(\textcolor{keyword}{const}\ std::string\&\ inside);}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ *\ Function:\ parse\_record\_line}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ Parses\ a\ record\ definition\ line\ from\ the\ input\ file.}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00026\ \textcolor{keywordtype}{bool}\ parse\_record\_line(\textcolor{keyword}{const}\ std::string\&\ line,\ \mbox{\hyperlink{struct_record}{Record}}\&\ rec);}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ Function:\ parse\_class\_line}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ Parses\ a\ class\ rule\ definition\ line\ from\ the\ input\ file.}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ Example:}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ \ \ "{}Blue:\ property\ \(\backslash\)"{}color\(\backslash\)"{}\ contains\ value\ 1"{}}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ *\ \ \ →\ ClassRule\ \{\ className\ =\ "{}Blue"{},\ rules\ =\ \{\ ...\ \}\ \}}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ Returns:}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ *\ \ \ true\ \ if\ the\ line\ is\ valid\ and\ parsed\ successfully,}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ *\ \ \ false\ otherwise.}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00041\ \textcolor{keywordtype}{bool}\ parse\_class\_line(\textcolor{keyword}{const}\ std::string\&\ line,\ \mbox{\hyperlink{struct_class_rule}{ClassRule}}\&\ cr);}
+
+\end{DoxyCode}
