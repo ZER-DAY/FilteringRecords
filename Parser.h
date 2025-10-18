@@ -5,6 +5,7 @@
 #include "Rule.h"
 #include "Error.h"
 #include <set>
+
 /*
  * Function: trim
  * --------------
@@ -23,8 +24,12 @@ std::vector<int> parseIntList(const std::string& inside);
  * Function: parse_record_line
  * ---------------------------
  * Parses a record definition line from the input file.
+ * Example:
+ *   "Table: color = [1, 4], size = [20, 40]"
+ *
+ * Now includes error tracking via std::set<Error>& errors.
  */
-bool parse_record_line(const std::string& line, Record& rec);
+bool parse_record_line(const std::string& line, Record& rec, std::set<Error>& errors);
 
 /*
  * Function: parse_class_line

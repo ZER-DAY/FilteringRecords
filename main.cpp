@@ -21,15 +21,15 @@ using namespace std;
 //    cout << CYAN << "=====================================\n";
 //    cout << "   RecordClassifier - Help Guide\n";
 //    cout << "=====================================" << RESET << "\n\n";
-//
+// 
 //    cout << YELLOW << "Usage:\n" << RESET;
 //    cout << "  FilteringRecords.exe <items_file> <rules_file> [output_file]\n\n";
-//
+// 
 //    cout << YELLOW << "Examples:\n" << RESET;
 //    cout << "  FilteringRecords.exe items.txt rules.txt\n";
 //    cout << "  FilteringRecords.exe items.txt rules.txt output.txt\n";
 //    cout << "  FilteringRecords.exe -h\n\n";
-//
+// 
 //    cout << YELLOW << "Input Format:\n" << RESET;
 //    cout << "  Records (items):\n";
 //    cout << "    <RecordName>: <property> = [values], ...\n";
@@ -47,10 +47,10 @@ int main(int argc, char* argv[]) {
     cout << "=====================================" << RESET << "\n";
 
     //// --- Handle arguments ---
-    //if (argc == 2 && (string(argv[1]) == "-h" || string(argv[1]) == "--help")) {
-    //    print_help();
-    //    return 0;
-    //}
+  //if (argc == 2 && (string(argv[1]) == "-h" || string(argv[1]) == "--help")) {
+  //    print_help();
+  //    return 0;
+  //}
 
     if (argc < 3) {
         cerr << RED << "[ERROR] Not enough arguments.\n"
@@ -79,6 +79,9 @@ int main(int argc, char* argv[]) {
     cout << YELLOW << "[INFO] Reading items from: " << itemsFile << RESET << endl;
     cout << YELLOW << "[INFO] Reading rules from: " << rulesFile << RESET << endl;
 
+    // --- Error system ---
+    std::set<Error> errors;
+
     // --- Parse items ---
     vector<Record> records;
     string line;
@@ -87,18 +90,15 @@ int main(int argc, char* argv[]) {
         if (clean.empty()) continue;
 
         Record r;
-        if (!parse_record_line(clean, r)) {
-            cerr << RED << "[ERROR] Invalid record format: " << clean << RESET << endl;
-            return 1;
+        if (!parse_record_line(clean, r, errors)) {
+            cerr << YELLOW << "[WARN] Invalid record format: " << clean << RESET << endl;
+            continue; // لا نوقف البرنامج — نكمل البقية
         }
         records.push_back(r);
     }
 
-    // --- Error system ---
-    std::set<Error> errors;
-    vector<ClassRule> classes;
-
     // --- Parse rules ---
+    vector<ClassRule> classes;
     while (getline(rules, line)) {
         string clean = trim(line);
         if (clean.empty()) continue;
@@ -106,8 +106,7 @@ int main(int argc, char* argv[]) {
         ClassRule cr;
         if (!parse_class_line(clean, cr, errors)) {
             cerr << YELLOW << "[WARN] Invalid rule format: " << clean << RESET << endl;
-            // لا نوقف التنفيذ — نتابع قراءة باقي القواعد
-            continue;
+            continue; // لا نوقف — نكمل البقية
         }
 
         classes.push_back(cr);
@@ -115,7 +114,7 @@ int main(int argc, char* argv[]) {
 
     // --- بعد الانتهاء من التحليل، عرض الأخطاء ---
     if (!errors.empty()) {
-        cout << RED << "\n[WARN] Some rules contain errors:\n" << RESET;
+        cout << RED << "\n[WARN] Some records or rules contain errors:\n" << RESET;
         cout << CYAN << "------------------------------------------------------------\n";
         cout << "Code                  | Message                                 | Source\n";
         cout << "------------------------------------------------------------" << RESET << endl;
@@ -131,7 +130,7 @@ int main(int argc, char* argv[]) {
 
         cout << CYAN << "------------------------------------------------------------" << RESET << endl;
         cout << YELLOW << errors.size() << " error(s) detected. "
-            << "Output will include only valid rules.\n" << RESET;
+            << "Output will include only valid items/rules.\n" << RESET;
     }
 
     // --- Validation ---

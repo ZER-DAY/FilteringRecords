@@ -1,8 +1,9 @@
 ﻿#include "pch.h"
 #include "CppUnitTest.h"
 
-#include "../Record.h"   //"../FilteringRecords/Record.h"
-#include "../Parser.h"   // где реализована parse_record_line
+#include "../Record.h"   
+#include "../Parser.h"   
+#include "../Error.h" 
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -16,7 +17,8 @@ namespace ParseRecordLineTests
         TEST_METHOD(CorrectRecord_ShouldParse)
         {
             Record r;
-            bool ok = parse_record_line("Wardrobe: color = [1, 2], size = [10, 20]", r);
+            std::set<Error> errors;
+            bool ok = parse_record_line("Wardrobe: color = [1, 2], size = [10, 20]", r, errors);
 
             Assert::IsTrue(ok);
             Assert::AreEqual(std::string("Wardrobe"), r.name);
@@ -30,7 +32,8 @@ namespace ParseRecordLineTests
         TEST_METHOD(IncorrectValue_ShouldFail)
         {
             Record r;
-            bool ok = parse_record_line("Table: color = [1, a, 3]", r);
+            std::set<Error> errors;
+            bool ok = parse_record_line("Table: color = [1, a, 3]", r, errors);
             Assert::IsFalse(ok);
         }
 
@@ -38,7 +41,8 @@ namespace ParseRecordLineTests
         TEST_METHOD(DuplicateProperty_ShouldFail)
         {
             Record r;
-            bool ok = parse_record_line("Chair: size=[10], size=[20]", r);
+            std::set<Error> errors;
+            bool ok = parse_record_line("Chair: size=[10], size=[20]", r, errors);
             Assert::IsFalse(ok);
         }
 
@@ -46,7 +50,8 @@ namespace ParseRecordLineTests
         TEST_METHOD(NoProperties_ShouldFail)
         {
             Record r;
-            bool ok = parse_record_line("Lamp:", r);
+            std::set<Error> errors;
+            bool ok = parse_record_line("Lamp:", r, errors);
             Assert::IsFalse(ok);
         }
 
@@ -54,7 +59,8 @@ namespace ParseRecordLineTests
         TEST_METHOD(EmptyName_ShouldFail)
         {
             Record r;
-            bool ok = parse_record_line(": color=[1]", r);
+            std::set<Error> errors;
+            bool ok = parse_record_line(": color=[1]", r, errors);
             Assert::IsFalse(ok);
         }
 
@@ -62,7 +68,8 @@ namespace ParseRecordLineTests
         TEST_METHOD(UnclosedBracket_ShouldFail)
         {
             Record r;
-            bool ok = parse_record_line("Chair: size=[10,20", r);
+            std::set<Error> errors;
+            bool ok = parse_record_line("Chair: size=[10,20", r, errors);
             Assert::IsFalse(ok);
         }
 
@@ -70,7 +77,8 @@ namespace ParseRecordLineTests
         TEST_METHOD(DoubleBrackets_ShouldFail)
         {
             Record r;
-            bool ok = parse_record_line("Table: color=[[1,2]]", r);
+            std::set<Error> errors;
+            bool ok = parse_record_line("Table: color=[[1,2]]", r, errors);
             Assert::IsFalse(ok);
         }
 
@@ -78,7 +86,8 @@ namespace ParseRecordLineTests
         TEST_METHOD(SingleProperty_ShouldWork)
         {
             Record r;
-            bool ok = parse_record_line("Lamp: power=[100]", r);
+            std::set<Error> errors;
+            bool ok = parse_record_line("Lamp: power=[100]", r, errors);
             Assert::IsTrue(ok);
             Assert::AreEqual(std::string("Lamp"), r.name);
             Assert::IsNotNull(r.getProperty("power"));
@@ -88,7 +97,8 @@ namespace ParseRecordLineTests
         TEST_METHOD(ExtraSpaces_ShouldWork)
         {
             Record r;
-            bool ok = parse_record_line("   Sofa   : color = [ 5 ]", r);
+            std::set<Error> errors;
+            bool ok = parse_record_line("   Sofa   : color = [ 5 ]", r, errors);
             Assert::IsTrue(ok);
             Assert::AreEqual(std::string("Sofa"), r.name);
             Assert::IsNotNull(r.getProperty("color"));
@@ -99,7 +109,8 @@ namespace ParseRecordLineTests
         TEST_METHOD(SpacesAroundValues_ShouldWork)
         {
             Record r;
-            bool ok = parse_record_line("Box: length = [  50  ]", r);
+            std::set<Error> errors;
+            bool ok = parse_record_line("Box: length = [  50  ]", r, errors);
             Assert::IsTrue(ok);
             Assert::AreEqual(1, (int)r.getProperty("length")->values.size());
             Assert::AreEqual(50, r.getProperty("length")->values[0]);
@@ -114,7 +125,8 @@ namespace ParseRecordLineTests
                 line += " p" + std::to_string(i) + "=[1]";
             }
             Record r;
-            bool ok = parse_record_line(line, r);
+            std::set<Error> errors;
+            bool ok = parse_record_line(line, r, errors);
             Assert::IsTrue(ok);
             Assert::AreEqual((size_t)1000, r.properties.size());
         }
@@ -123,36 +135,37 @@ namespace ParseRecordLineTests
         TEST_METHOD(DifferentCaseProperty_ShouldFail)
         {
             Record r;
-            bool ok = parse_record_line("Item: Size=[10], size=[20]", r);
-            // если чувствительно к регистру — ожидаем false
+            std::set<Error> errors;
+            bool ok = parse_record_line("Item: Size=[10], size=[20]", r, errors);
             Assert::IsFalse(ok);
         }
 
-        // 13. Лишние пробелы (covered by ExtraSpaces)
-
-        // 14. Пустая строка
+        // 13. Пустая строка
         TEST_METHOD(EmptyLine_ShouldFail)
         {
             Record r;
-            bool ok = parse_record_line("", r);
+            std::set<Error> errors;
+            bool ok = parse_record_line("", r, errors);
             Assert::IsFalse(ok);
         }
 
-        // 15. Скобки без значений
+        // 14. Скобки без значений
         TEST_METHOD(EmptyBrackets_ShouldWork)
         {
             Record r;
-            bool ok = parse_record_line("Shelf: height = []", r);
+            std::set<Error> errors;
+            bool ok = parse_record_line("Shelf: height = []", r, errors);
             Assert::IsTrue(ok);
             Assert::IsNotNull(r.getProperty("height"));
             Assert::AreEqual((int)0, (int)r.getProperty("height")->values.size());
         }
 
-        // 16. Отрицательные значения
+        // 15. Отрицательные значения
         TEST_METHOD(NegativeValues_ShouldWork)
         {
             Record r;
-            bool ok = parse_record_line("Desk: width=[-5, -10]", r);
+            std::set<Error> errors;
+            bool ok = parse_record_line("Desk: width=[-5, -10]", r, errors);
             Assert::IsTrue(ok);
             Assert::IsNotNull(r.getProperty("width"));
             Assert::AreEqual(2, (int)r.getProperty("width")->values.size());
