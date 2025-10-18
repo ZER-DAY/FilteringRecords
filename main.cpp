@@ -94,29 +94,44 @@ int main(int argc, char* argv[]) {
         records.push_back(r);
     }
 
+    // --- Error system ---
     std::set<Error> errors;
-
-    // Parse rules
     vector<ClassRule> classes;
+
+    // --- Parse rules ---
     while (getline(rules, line)) {
         string clean = trim(line);
         if (clean.empty()) continue;
 
         ClassRule cr;
-        // التعديل هنا 👇
         if (!parse_class_line(clean, cr, errors)) {
-            cerr << RED << "[ERROR] Invalid rule format: " << clean << RESET << endl;
-
-            // ✅ اطبع كل الأخطاء المجمّعة
-            for (const auto& e : errors) {
-                cerr << RED << "  -> (" << e.code << ") " << e.message
-                    << " [" << e.source << "]" << RESET << endl;
-            }
-
-            return 1;
+            cerr << YELLOW << "[WARN] Invalid rule format: " << clean << RESET << endl;
+            // لا نوقف التنفيذ — نتابع قراءة باقي القواعد
+            continue;
         }
 
         classes.push_back(cr);
+    }
+
+    // --- بعد الانتهاء من التحليل، عرض الأخطاء ---
+    if (!errors.empty()) {
+        cout << RED << "\n[WARN] Some rules contain errors:\n" << RESET;
+        cout << CYAN << "------------------------------------------------------------\n";
+        cout << "Code                  | Message                                 | Source\n";
+        cout << "------------------------------------------------------------" << RESET << endl;
+
+        for (const auto& e : errors) {
+            string codeStr = e.codeToString(e.code);
+            cout << codeStr
+                << string(22 - min<size_t>(codeStr.length(), 22), ' ')
+                << " | " << e.message
+                << string(40 - min<size_t>(e.message.length(), 40), ' ')
+                << " | " << e.source << endl;
+        }
+
+        cout << CYAN << "------------------------------------------------------------" << RESET << endl;
+        cout << YELLOW << errors.size() << " error(s) detected. "
+            << "Output will include only valid rules.\n" << RESET;
     }
 
     // --- Validation ---
@@ -143,6 +158,9 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    fout << "--------------------------------------------\n";
+    fout << "Class          | Matching Records\n";
+    fout << "--------------------------------------------\n";
     for (auto& c : classes) {
         fout << c.className << ": ";
         if (result[c.className].empty()) {
@@ -156,6 +174,9 @@ int main(int argc, char* argv[]) {
             fout << "\n";
         }
     }
+
+    fout << "--------------------------------------------\n";
+    fout << "[OK] Classification completed.\n";
 
     cout << GREEN << "[OK] Results written to: " << outputFile << RESET << endl;
     return 0;

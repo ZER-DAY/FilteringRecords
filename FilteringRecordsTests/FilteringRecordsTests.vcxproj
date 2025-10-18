@@ -100,7 +100,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;$(SolutionDir)FilteringRecords\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Classifier.obj;main.obj;Matching.obj;Parser.obj;Record.obj;Validation.obj;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Classifier.obj;main.obj;Error.obj;Matching.obj;Parser.obj;Record.obj;Validation.obj;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

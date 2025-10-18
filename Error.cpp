@@ -1,7 +1,10 @@
-#include "../Error.h"
+#include "Error.h"
 #include <iostream>
 using namespace std;
 
+/*
+ * Converts ErrorCode enum values to human-readable strings.
+ */
 string Error::codeToString(ErrorCode code) {
     switch (code) {
     case ErrorCode::INCORRECT_RULE:        return "INCORRECT_RULE";
@@ -16,11 +19,25 @@ string Error::codeToString(ErrorCode code) {
     }
 }
 
+/*
+ * Combines error details into a formatted string.
+ */
 string Error::toString() const {
     return "[" + codeToString(code) + "] " + message + " (" + source + ")";
 }
 
+/*
+ * Prints formatted error to the standard error output.
+ */
 void Error::print() const {
     cerr << "[ERROR: " << codeToString(code) << "] "
         << message << " — Source: " << source << endl;
+}
+
+/*
+ * Allows streaming ErrorCode directly into output streams.
+ */
+ostream& operator<<(ostream& os, const ErrorCode& c) {
+    os << Error::codeToString(c);
+    return os;
 }
