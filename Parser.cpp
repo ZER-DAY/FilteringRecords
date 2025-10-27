@@ -57,29 +57,33 @@ std::vector<int> parseIntList(const std::string& inside) {
  * Example:
  *   "Table: color = [1, 4], size = [20, 40], coating = [44]"
  *
- * This version includes error tracking through std::set<Error>& errors
+ * Uses std::set<Error>& errors (no message field anymore)
  */
 bool parse_record_line(const std::string& line, Record& rec, std::set<Error>& errors) {
     if (line.empty()) {
-        errors.insert({ ErrorCode::INVALID_RECORD, "Empty line in record file", "Parser" });
+        Error e{ ErrorCode::INVALID_RECORD, "Parser" };
+        errors.insert(e);
         return false;
     }
 
     size_t colon = line.find(':');
     if (colon == std::string::npos) {
-        errors.insert({ ErrorCode::INVALID_RECORD, "Missing ':' separator in record line", "Parser" });
+        Error e{ ErrorCode::INVALID_RECORD, "Parser" };
+        errors.insert(e);
         return false;
     }
 
     rec.name = trim(line.substr(0, colon));
     if (rec.name.empty()) {
-        errors.insert({ ErrorCode::EMPTY_RECORD_NAME, "Record name is empty", "Parser" });
+        Error e{ ErrorCode::EMPTY_RECORD_NAME, "Parser" };
+        errors.insert(e);
         return false;
     }
 
     std::string propsPart = trim(line.substr(colon + 1));
     if (propsPart.empty()) {
-        errors.insert({ ErrorCode::INVALID_RECORD, "No properties defined after record name", "Parser" });
+        Error e{ ErrorCode::INVALID_RECORD, "Parser" };
+        errors.insert(e);
         return false;
     }
 
@@ -103,7 +107,8 @@ bool parse_record_line(const std::string& line, Record& rec, std::set<Error>& er
     }
     if (!cur.empty()) chunks.push_back(trim(cur));
     if (chunks.empty()) {
-        errors.insert({ ErrorCode::INVALID_RECORD, "No valid property chunks found in record", "Parser" });
+        Error e{ ErrorCode::INVALID_RECORD, "Parser" };
+        errors.insert(e);
         return false;
     }
 
@@ -112,7 +117,8 @@ bool parse_record_line(const std::string& line, Record& rec, std::set<Error>& er
 
         size_t eq = token.find('=');
         if (eq == std::string::npos) {
-            errors.insert({ ErrorCode::INVALID_RECORD, "Missing '=' in property definition", "Parser" });
+            Error e{ ErrorCode::INVALID_RECORD, "Parser" };
+            errors.insert(e);
             return false;
         }
 
@@ -122,7 +128,8 @@ bool parse_record_line(const std::string& line, Record& rec, std::set<Error>& er
 
         std::string val = trim(token.substr(eq + 1));
         if (val.size() < 2 || val.front() != '[' || val.back() != ']') {
-            errors.insert({ ErrorCode::INCORRECT_RULE, "Invalid brackets in property value", "Parser" });
+            Error e{ ErrorCode::INCORRECT_RULE, "Parser" };
+            errors.insert(e);
             return false;
         }
 
@@ -131,13 +138,15 @@ bool parse_record_line(const std::string& line, Record& rec, std::set<Error>& er
 
         // reject duplicate property
         if (rec.properties.count(pname)) {
-            errors.insert({ ErrorCode::DUPLICATE_PROPERTY, "Duplicate property name: " + pname, "Parser" });
+            Error e{ ErrorCode::DUPLICATE_PROPERTY, "Parser" };
+            errors.insert(e);
             return false;
         }
 
         // reject non-numeric values
         if (!inside.empty() && p.values.empty()) {
-            errors.insert({ ErrorCode::INVALID_NUMERIC_VALUE, "Non-numeric values in property: " + pname, "Parser" });
+            Error e{ ErrorCode::INVALID_NUMERIC_VALUE, "Parser" };
+            errors.insert(e);
             return false;
         }
 
@@ -145,7 +154,8 @@ bool parse_record_line(const std::string& line, Record& rec, std::set<Error>& er
     }
 
     if (rec.properties.empty()) {
-        errors.insert({ ErrorCode::INVALID_RECORD, "Record has no valid properties", "Parser" });
+        Error e{ ErrorCode::INVALID_RECORD, "Parser" };
+        errors.insert(e);
         return false;
     }
 
@@ -155,12 +165,21 @@ bool parse_record_line(const std::string& line, Record& rec, std::set<Error>& er
 /*
  * Function: parse_class_line
  * --------------------------
- * (unchanged)
+ * Parses a class definition line from the input file.
+ *
+ * Supported patterns:
+ *   - has property "name"
+ *   - property "name" has N values
+ *   - property "name" contains value X
+ *   - property "name" = [a, b, c]
+ *
+ * Uses std::set<Error>& errors (no message field)
  */
 bool parse_class_line(const std::string& line, ClassRule& cr, std::set<Error>& errors) {
     size_t colon = line.find(':');
     if (colon == std::string::npos) {
-        errors.insert({ ErrorCode::INCORRECT_RULE, "Missing ':' separator in class definition", "Parser" });
+        Error e{ ErrorCode::INCORRECT_RULE, "Parser" };
+        errors.insert(e);
         return false;
     }
 
@@ -168,86 +187,108 @@ bool parse_class_line(const std::string& line, ClassRule& cr, std::set<Error>& e
     std::string desc = trim(line.substr(colon + 1));
 
     if (cr.className.empty()) {
-        errors.insert({ ErrorCode::EMPTY_CLASS_NAME, "Empty class name", "Parser" });
+        Error e{ ErrorCode::EMPTY_CLASS_NAME, "Parser" };
+        errors.insert(e);
         return false;
     }
 
     Rule r;
 
+    // HAS_PROPERTY
     if (desc.find("has property") != std::string::npos || desc.find("есть свойство") != std::string::npos) {
         r.type = HAS_PROPERTY;
         size_t q1 = desc.find("\""), q2 = desc.find_last_of("\"");
         if (q1 == std::string::npos || q2 == std::string::npos || q2 <= q1) {
-            errors.insert({ ErrorCode::MISSING_QUOTE, "Invalid quotes in 'has property' rule", "Parser" });
+            Error e{ ErrorCode::MISSING_QUOTE, "Parser" };
+            errors.insert(e);
             return false;
         }
         r.propertyName = desc.substr(q1 + 1, q2 - q1 - 1);
     }
+    // PROPERTY_SIZE
     else if (desc.find("has") != std::string::npos && desc.find("values") != std::string::npos) {
         r.type = PROPERTY_SIZE;
         size_t q1 = desc.find("\""), q2 = desc.find_last_of("\"");
         if (q1 == std::string::npos || q2 == std::string::npos || q2 <= q1) {
-            errors.insert({ ErrorCode::MISSING_QUOTE, "Invalid property format in 'has N values' rule", "Parser" });
+            Error e{ ErrorCode::MISSING_QUOTE, "Parser" };
+            errors.insert(e);
             return false;
         }
         r.propertyName = desc.substr(q1 + 1, q2 - q1 - 1);
+
         for (size_t i = 0; i < desc.size(); i++)
             if (isdigit((unsigned char)desc[i])) {
                 r.expectedSize = stoi(desc.substr(i));
                 break;
             }
+
         if (r.expectedSize <= 0) {
-            errors.insert({ ErrorCode::INVALID_NUMERIC_VALUE, "Missing numeric value in 'has N values' rule", "Parser" });
+            Error e{ ErrorCode::INVALID_NUMERIC_VALUE, "Parser" };
+            errors.insert(e);
             return false;
         }
     }
+    // CONTAINS_VALUE
     else if (desc.find("contains value") != std::string::npos || desc.find("содержит значение") != std::string::npos) {
         r.type = CONTAINS_VALUE;
         size_t q1 = desc.find("\""), q2 = desc.find_last_of("\"");
         if (q1 == std::string::npos || q2 == std::string::npos || q2 <= q1) {
-            errors.insert({ ErrorCode::MISSING_QUOTE, "Invalid quotes in 'contains value' rule", "Parser" });
+            Error e{ ErrorCode::MISSING_QUOTE, "Parser" };
+            errors.insert(e);
             return false;
         }
         r.propertyName = desc.substr(q1 + 1, q2 - q1 - 1);
+
         size_t pos = desc.find("value");
         if (pos == std::string::npos) {
-            errors.insert({ ErrorCode::INCORRECT_RULE, "Missing keyword 'value' in rule", "Parser" });
+            Error e{ ErrorCode::INCORRECT_RULE, "Parser" };
+            errors.insert(e);
             return false;
         }
+
         std::string afterValue = trim(desc.substr(pos + 5));
         if (afterValue.empty()) {
-            errors.insert({ ErrorCode::INVALID_NUMERIC_VALUE, "No numeric value after 'value' keyword", "Parser" });
+            Error e{ ErrorCode::INVALID_NUMERIC_VALUE, "Parser" };
+            errors.insert(e);
             return false;
         }
+
         for (char c : afterValue)
             if (!isdigit((unsigned char)c) && c != ' ') {
-                errors.insert({ ErrorCode::INVALID_NUMERIC_VALUE, "Non-numeric characters found after 'value'", "Parser" });
+                Error e{ ErrorCode::INVALID_NUMERIC_VALUE, "Parser" };
+                errors.insert(e);
                 return false;
             }
+
         r.expectedValue = stoi(afterValue);
     }
+    // EQUALS_EXACTLY
     else if (desc.find("=") != std::string::npos && desc.find("[") != std::string::npos) {
         r.type = EQUALS_EXACTLY;
         size_t q1 = desc.find("\""), q2 = desc.find_last_of("\"");
         if (q1 == std::string::npos || q2 == std::string::npos || q2 <= q1) {
-            errors.insert({ ErrorCode::MISSING_QUOTE, "Invalid quotes in '=' rule", "Parser" });
+            Error e{ ErrorCode::MISSING_QUOTE, "Parser" };
+            errors.insert(e);
             return false;
         }
         r.propertyName = desc.substr(q1 + 1, q2 - q1 - 1);
         size_t lb = desc.find("["), rb = desc.find("]");
         if (lb == std::string::npos || rb == std::string::npos || rb <= lb) {
-            errors.insert({ ErrorCode::INCORRECT_RULE, "Invalid bracket structure in '=' rule", "Parser" });
+            Error e{ ErrorCode::INCORRECT_RULE, "Parser" };
+            errors.insert(e);
             return false;
         }
         std::string inside = desc.substr(lb + 1, rb - lb - 1);
         r.expectedExactValues = parseIntList(inside);
         if (r.expectedExactValues.empty()) {
-            errors.insert({ ErrorCode::INVALID_NUMERIC_VALUE, "Empty or invalid number list in '=' rule", "Parser" });
+            Error e{ ErrorCode::INVALID_NUMERIC_VALUE, "Parser" };
+            errors.insert(e);
             return false;
         }
     }
     else {
-        errors.insert({ ErrorCode::UNKNOWN_RULE_TYPE, "Unrecognized class rule format", "Parser" });
+        Error e{ ErrorCode::UNKNOWN_RULE_TYPE, "Parser" };
+        errors.insert(e);
         return false;
     }
 

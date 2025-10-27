@@ -17,40 +17,11 @@ using namespace std;
 #define YELLOW  "\033[33m"
 #define CYAN    "\033[36m"
 
-//void print_help() {
-//    cout << CYAN << "=====================================\n";
-//    cout << "   RecordClassifier - Help Guide\n";
-//    cout << "=====================================" << RESET << "\n\n";
-// 
-//    cout << YELLOW << "Usage:\n" << RESET;
-//    cout << "  FilteringRecords.exe <items_file> <rules_file> [output_file]\n\n";
-// 
-//    cout << YELLOW << "Examples:\n" << RESET;
-//    cout << "  FilteringRecords.exe items.txt rules.txt\n";
-//    cout << "  FilteringRecords.exe items.txt rules.txt output.txt\n";
-//    cout << "  FilteringRecords.exe -h\n\n";
-// 
-//    cout << YELLOW << "Input Format:\n" << RESET;
-//    cout << "  Records (items):\n";
-//    cout << "    <RecordName>: <property> = [values], ...\n";
-//    cout << "  Rules:\n";
-//    cout << "    <ClassName>: has property \"x\"\n";
-//    cout << "    <ClassName>: property \"x\" has N values\n";
-//    cout << "    <ClassName>: property \"x\" contains value Y\n";
-//    cout << "    <ClassName>: property \"x\" = [a, b, c]\n\n";
-//}
-
 int main(int argc, char* argv[]) {
     cout << CYAN << "=====================================\n";
     cout << "     RecordClassifier - v2.2\n";
     cout << "   Items + Rules --> Output\n";
     cout << "=====================================" << RESET << "\n";
-
-    //// --- Handle arguments ---
-  //if (argc == 2 && (string(argv[1]) == "-h" || string(argv[1]) == "--help")) {
-  //    print_help();
-  //    return 0;
-  //}
 
     if (argc < 3) {
         cerr << RED << "[ERROR] Not enough arguments.\n"
@@ -116,15 +87,14 @@ int main(int argc, char* argv[]) {
     if (!errors.empty()) {
         cout << RED << "\n[WARN] Some records or rules contain errors:\n" << RESET;
         cout << CYAN << "------------------------------------------------------------\n";
-        cout << "Code                  | Message                                 | Source\n";
+        cout << "Code                  | Source\n";
         cout << "------------------------------------------------------------" << RESET << endl;
 
         for (const auto& e : errors) {
-            string codeStr = e.codeToString(e.code);
+            Error temp = e; // لأن codeToString ليست const
+            string codeStr = temp.codeToString(e.code);
             cout << codeStr
                 << string(22 - min<size_t>(codeStr.length(), 22), ' ')
-                << " | " << e.message
-                << string(40 - min<size_t>(e.message.length(), 40), ' ')
                 << " | " << e.source << endl;
         }
 
