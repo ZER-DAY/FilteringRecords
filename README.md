@@ -97,7 +97,8 @@ enum RuleType {
 ## UML-диаграмма классов / UML Class Diagram
 
 ```
-![UML Class Diagram](images/uml_class_diagram.png)
+![UML-диаграмма классов](https://github.com/user-attachments/assets/0a17dc16-6313-4a2f-be61-c1d83e5e26c3)
+
 ```
 
 ---
@@ -105,7 +106,7 @@ enum RuleType {
 ## Диаграмма вызовов функций / Function Call Diagram
 
 ```
-![UML Class Diagram](images/Диаграмма вызовов функций.jpg)
+![Диаграмма вызовов функций ](https://github.com/user-attachments/assets/e3b03ba5-c411-438a-9c46-b2b44303cb8e)
 
 ```
 
@@ -114,7 +115,8 @@ enum RuleType {
 ## Диаграмма потоков данных / Data Flow Diagram
 
 ```
-![UML Class Diagram](images/Диаграмма потоков данных.jpg)
+
+![Диаграмма потоков данных ](https://github.com/user-attachments/assets/84fd9882-0010-49bf-9cda-1e9d92b7271d)
 
 ```
 
