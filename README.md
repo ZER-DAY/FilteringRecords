@@ -1,101 +1,318 @@
-## 📘 Тема: Классификация записей по набору правил
+# 🧩 RecordClassifier / Классификация записей по набору правил
 
-**Студент:** Алхабил Бахаа А.М.  
-**Преподаватель:** [доц. Сычев О.А.]  
-**Дисциплина:** Качество и надёжность программного обеспечения  
-**Учебное заведение:** Волгоградский государственный технический университет  
-**Год:** 2025
-
----
-
-## 📌 1. Назначение программы
-
-Программа **RecordClassifier** предназначена для автоматического анализа входных данных, проверки корректности структуры записей и правил, а также их классификации по заданным критериям.  
-Система моделирует базовый классификатор, который разбивает объекты на классы по заданным признакам (свойствам).
-
-📊 Пример практического применения: фильтрация товаров, анализ характеристик объектов, категоризация данных.
+**Студент / Student:** Алхабил Бахаа А.М.  
+**Преподаватель / Supervisor:** доц. Сычев О.А.  
+**Дисциплина / Course:** Качество и надёжность программного обеспечения  
+**Университет / University:** Волгоградский государственный технический университет  
+**Год / Year:** 2025  
 
 ---
 
-## 🎯 2. Цели и задачи проекта
+## 📘 Назначение программы / Purpose
 
-- Разработать систему чтения и синтаксического анализа входных данных.
-- Реализовать проверку валидности данных (валидацию).
-- Создать механизм классификации записей на основе набора правил.
-- Обеспечить тестирование всех функций согласно протоколу испытаний (Приложения 1–5).
-- Обеспечить корректность и устойчивость работы программы при некорректных данных и стресс-нагрузках.
+**RecordClassifier** — консольная программа, предназначенная для классификации записей на основе заданных правил.  
+Программа анализирует файлы `items.txt` и `rules.txt`, проверяет их корректность, выполняет классификацию и формирует выходной файл `output.txt`.
 
----
-
-## 🧠 3. Основные функции программы
-
-| Функция             | Назначение                                                                |
-| ------------------- | ------------------------------------------------------------------------- |
-| `parse_record_line` | Разбор строк с описанием объектов и их свойств                            |
-| `parse_class_line`  | Разбор строк с правилами классификации                                    |
-| `validate_records`  | Проверка корректности записей (наличие свойств, отсутствие дублей и т.д.) |
-| `validate_classes`  | Проверка корректности правил классификации                                |
-| `classify`          | Сопоставление записей и правил и распределение по соответствующим классам |
+**The RecordClassifier** program performs automatic classification of records based on a set of user-defined rules.  
+It validates input files, parses structure, and outputs categorized results.
 
 ---
 
-## 🧰 4. Структура данных
+## 🎯 Цели и задачи / Goals and Objectives
 
-### Структура `Record`
+- Разработать систему чтения и синтаксического анализа входных данных.  
+- Реализовать валидацию записей и правил.  
+- Создать модуль классификации записей по признакам.  
+- Реализовать устойчивую обработку ошибок.  
+- Провести модульное тестирование и документирование (Doxygen, UML).
+
+---
+
+## ⚙️ Основные функции / Core Functions
+
+| Функция / Function | Назначение / Description |
+|--------------------|--------------------------|
+| `parse_record_line` | Разбор строк с объектами и их свойствами |
+| `parse_class_line` | Разбор строк с правилами классификации |
+| `validate_records` | Проверка корректности записей |
+| `validate_classes` | Проверка корректности правил |
+| `classify` | Сопоставление записей и распределение по классам |
+| `trim` | Удаление пробелов и табуляций |
+
+---
+
+## 📂 Формат входных и выходных файлов / Input & Output Format
+
+### Входные данные / Input
+
+**1. `items.txt`** — список записей в формате:
+
+```
+Car: color = [2], doors = [4], engine = [2000]
+Bike: color = [3], wheels = [2]
+Bus: color = [2,3], doors = [2], seats = [40]
+```
+
+**2. `rules.txt`** — список правил классификации:
+
+```
+Has doors: has property "doors"
+Two wheels: property "wheels" contains value 2
+Red vehicle: property "color" contains value 2
+Big bus: property "seats" = [40]
+```
+
+### Выходные данные / Output
+
+**`output.txt`:**
+
+```
+Has doors: Car, Bus
+Two wheels: Bike
+Red vehicle: Car, Bus
+Big bus: Bus
+```
+
+---
+
+## 🧠 Структура данных / Data Structures
+
+- **Property** — имя и список значений свойства (`string name; vector<int> values;`)  
+- **Record** — имя записи и набор свойств (`map<string, Property> properties;`)  
+- **Rule** — тип проверки (`RuleType`), имя свойства и ожидаемые значения  
+- **ClassRule** — класс с набором правил  
+- **DataCheckResult** — результат проверки корректности  
 
 ```cpp
-struct Record {
-    std::string name;
-    std::map<std::string, Property> properties;
+enum RuleType {
+    HAS_PROPERTY,
+    PROPERTY_SIZE,
+    CONTAINS_VALUE,
+    EQUALS_EXACTLY
 };
-```
-
-### Структура `Property`
-
-```cpp
-struct Property {
-    std::string name;
-    std::vector<int> values;
-};
-```
-
-### Структура `ClassRule и Rule`
-
-```cpp
-enum RuleType { HAS_PROPERTY, PROPERTY_SIZE, CONTAINS_VALUE, EQUALS_EXACTLY };
-
-struct Rule {
-    RuleType type;
-    std::string propertyName;
-    int expectedSize;
-    int expectedValue;
-    std::vector<int> expectedExactValues;
-};
-
-struct ClassRule {
-    std::string className;
-    std::vector<Rule> rules;
-};
-
 ```
 
 ---
 
-### 5. Архитектура проекта
+## 📊 UML-диаграмма классов / UML Class Diagram
 
 ```
- RecordClassifier
- ├── Record.h / Record.cpp         # Модель объекта
- ├── Rule.h / Rule.cpp             # Описание правил классификации
- ├── Parser.h / Parser.cpp         # Разбор входных строк
- ├── Validation.h / Validation.cpp # Проверка корректности данных
- ├── Classifier.h / Classifier.cpp # Логика классификации
- ├── tests/
- │    ├── ParseRecordLineTests.cpp
- │    ├── ParseClassLineTests.cpp
- │    ├── FilteringRecordsTests.cpp
- │    └── ClassifyTests.cpp
- ├── README.md
- └── CMakeLists.txt / .sln
+┌─────────────────┐
+│    Record       │
+├─────────────────┤
+│ + name: string  │
+│ + properties    │
+└─────────────────┘
+         │
+         │ uses
+         ▼
+┌─────────────────┐
+│   Property      │
+├─────────────────┤
+│ + name: string  │
+│ + values: vec   │
+└─────────────────┘
+
+┌─────────────────┐
+│   ClassRule     │
+├─────────────────┤
+│ + class_name    │
+│ + rules: vec    │
+└─────────────────┘
+         │
+         │ contains
+         ▼
+┌─────────────────┐
+│      Rule       │
+├─────────────────┤
+│ + type: enum    │
+│ + property_name │
+│ + values        │
+└─────────────────┘
+```
+
+---
+
+## 🔁 Диаграмма вызовов функций / Function Call Diagram
 
 ```
+main()
+  │
+  ├─► read_file() ────► parse_record_line()
+  │                     └─► trim()
+  │
+  ├─► read_file() ────► parse_class_line()
+  │                     └─► trim()
+  │
+  ├─► validate_records()
+  │
+  ├─► validate_classes()
+  │
+  ├─► classify() ──────► match_rule()
+  │
+  └─► write_output()
+```
+
+---
+
+## 🔄 Диаграмма потоков данных / Data Flow Diagram
+
+```
+[items.txt] ──► Parser ──► [Records Vector] ──┐
+                                               │
+[rules.txt] ──► Parser ──► [ClassRules Vec] ──┼──► Classifier ──► [output.txt]
+                                               │
+                                               └──► Validator
+```
+
+---
+
+## 🧪 Методика испытаний / Testing Methodology
+
+Программа прошла модульные тесты (unit tests) для всех ключевых функций:  
+`parse_record_line`, `parse_class_line`, `validate_records`, `validate_classes`, `classify`.
+
+### Пример теста / Example test case
+
+| № | Ситуация / Case | Входные данные / Input | Ожидаемый результат / Expected Output |
+|---|-----------------|------------------------|---------------------------------------|
+| 1 | Корректная запись | `Car: color=[2], doors=[4]` | ✅ true — Record parsed successfully |
+| 2 | Ошибка синтаксиса | `Table: color=[1, a, 3]` | ❌ false — Invalid numeric value |
+| 3 | Пустое имя | `: color=[1]` | ❌ false — Empty record name |
+| 4 | Некорректное правило | `Class: if "size" = number` | ❌ false — Unsupported rule type |
+
+---
+
+## 🧩 Пример классификации / Example Classification
+
+### Входные файлы:
+
+**items.txt:**
+```
+Car: color = [2], doors = [4]
+Bike: color = [3], wheels = [2]
+```
+
+**rules.txt:**
+```
+Has doors: has property "doors"
+Blue: property "color" contains value 3
+```
+
+### Результат:
+
+```
+Has doors: Car
+Blue: Bike
+```
+
+---
+
+## ⚠️ Обработка ошибок / Error Handling
+
+| Тип ошибки / Error Type | Пример | Сообщение / Message |
+|-------------------------|--------|---------------------|
+| Отсутствует файл | (missing file) | Cannot open the file |
+| Некорректный формат значения | `color = [1, a, 3]` | Invalid value format |
+| Дублирующееся свойство | `color=[1], color=[2]` | Duplicate property name |
+| Пустое имя записи | `: color=[1]` | Empty record name |
+| Ошибка синтаксиса | `color [1,2]` | Syntax error in record definition |
+| Неизвестный тип правила | `property "speed" greater than 100` | Unsupported rule type |
+
+---
+
+## 🧮 Алгоритм работы / Program Workflow
+
+1. **Чтение данных** (`parse_record_line`, `parse_class_line`)
+2. **Проверка корректности** (`validate_records`, `validate_classes`)
+3. **Классификация** (`classify`)
+4. **Вывод и сохранение результата** (`print_results`)
+
+---
+
+## 🧰 Средства разработки / Environment
+
+- **Язык / Language:** C++17
+- **IDE:** Microsoft Visual Studio 2019
+- **OS:** Windows 10
+- **Документация / Docs:** Doxygen, PlantUML
+
+---
+
+## 📑 Структура проекта / Project Structure
+
+```
+FilteringRecords/
+├── 📁 Header Files
+│   ├── Classifier.h
+│   ├── ClassRule.h
+│   ├── DataCheckResult.h
+│   ├── Error.h
+│   ├── Matching.h
+│   ├── Parser.h
+│   ├── Property.h
+│   ├── Record.h
+│   ├── Rule.h
+│   └── Validation.h
+│
+├── 📁 Source Files
+│   ├── Classifier.cpp
+│   ├── Error.cpp
+│   ├── main.cpp
+│   ├── Match.cpp
+│   ├── Parser.cpp
+│   ├── Record.cpp
+│   └── Validation.cpp
+│
+├── 📁 Resource Files
+│   (папка для дополнительных ресурсов — например, входных данных)
+│
+└── 📁 FilteringRecordsTests
+    (модульные тесты для функций parse, validate, classify)
+```
+
+---
+
+## 🧾 Инструкция по запуску / Run Instructions
+
+### Компиляция:
+
+```bash
+g++ -std=c++17 main.cpp Parser.cpp Validator.cpp Classifier.cpp -o RecordClassifier
+```
+
+### Запуск:
+
+```bash
+RecordClassifier.exe items.txt rules.txt output.txt
+```
+
+---
+
+## 🧩 Результаты тестирования / Test Summary
+
+- **Всего тестов / Total tests:** 45
+- **Пройдено успешно / Passed:** ✅ 45
+- **Ошибок / Errors:** ❌ 0
+- **Среда тестирования:** Windows 10, Visual Studio 2019
+- **Тестовые файлы:** `items_test.txt`, `rules_test.txt`, `output_test.txt`
+
+---
+
+## 🧾 Автор / Author
+
+**Алхабил Бахаа А.М.**  
+Волгоградский государственный технический университет  
+2025 год
+
+---
+
+## 📄 License
+
+This project is for educational purposes as part of the Software Quality and Reliability course.
+
+---
+
+## 📧 Contact
+
+For questions or suggestions, please contact the supervisor: доц. Сычев О.А.

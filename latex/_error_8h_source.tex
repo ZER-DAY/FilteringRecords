@@ -1,0 +1,61 @@
+\doxysection{Error.\+h}
+\hypertarget{_error_8h_source}{}\label{_error_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ *\ Class:\ Error}}
+\DoxyCodeLine{00007\ \textcolor{comment}{\ *\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00008\ \textcolor{comment}{\ *\ Represents\ a\ parsing\ or\ validation\ error.}}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ *\ Stores\ an\ error\ code\ and\ a\ human-\/readable\ message.}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00011\ \textcolor{keyword}{enum\ class}\ ErrorCode\ \{}
+\DoxyCodeLine{00012\ \ \ \ \ INCORRECT\_RULE,}
+\DoxyCodeLine{00013\ \ \ \ \ INVALID\_RECORD,}
+\DoxyCodeLine{00014\ \ \ \ \ DUPLICATE\_PROPERTY,}
+\DoxyCodeLine{00015\ \ \ \ \ MISSING\_QUOTE,}
+\DoxyCodeLine{00016\ \ \ \ \ UNKNOWN\_RULE\_TYPE,}
+\DoxyCodeLine{00017\ \ \ \ \ EMPTY\_CLASS\_NAME,}
+\DoxyCodeLine{00018\ \ \ \ \ EMPTY\_RECORD\_NAME,}
+\DoxyCodeLine{00019\ \ \ \ \ INVALID\_NUMERIC\_VALUE,}
+\DoxyCodeLine{00020\ \ \ \ \ NO\_RECORDS,}
+\DoxyCodeLine{00021\ \ \ \ \ NO\_PROPERTIES\_DEFINED,}
+\DoxyCodeLine{00022\ \ \ \ \ TYPE\_MISMATCH,}
+\DoxyCodeLine{00023\ \ \ \ \ NO\_CLASSES\_OR\_RULES,}
+\DoxyCodeLine{00024\ \ \ \ \ SYNTAX\_ERROR\_IN\_CLASS\_RULE,}
+\DoxyCodeLine{00025\ \ \ \ \ INVALID\_RULE\_FORMAT,}
+\DoxyCodeLine{00026\ \ \ \ \ VALUE\_COUNT\_ZERO,}
+\DoxyCodeLine{00027\ \ \ \ \ RULE\_BODY\_EMPTY,}
+\DoxyCodeLine{00028\ \ \ \ \ INVALID\_VALUE\_IN\_CONTAINS\_VALUE}
+\DoxyCodeLine{00029\ \};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ Struct:\ Error}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ Describes\ a\ specific\ error\ with\ code,\ ErrorCode,\ and\ its\ source\ (e.g.,\ Parser\ or\ Validator).}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00036\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_error}{Error}}\ \{}
+\DoxyCodeLine{00037\ \ \ \ \ ErrorCode\ code;\ \ \ \ \ \ \textcolor{comment}{//\ Type\ of\ the\ error}}
+\DoxyCodeLine{00038\ \ \ \ \ std::string\ source;\ \ \textcolor{comment}{//\ Module\ or\ function\ where\ it\ occurred}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{//\ Converts\ the\ error\ code\ to\ human-\/readable\ text}}
+\DoxyCodeLine{00041\ \ \ \ \ std::string\ codeToString(ErrorCode\ code);\ \ \textcolor{comment}{//\ no\ longer\ static}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{comment}{//\ Converts\ full\ error\ info\ to\ formatted\ string}}
+\DoxyCodeLine{00044\ \ \ \ \ std::string\ toString()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{comment}{//\ Prints\ formatted\ error\ to\ console}}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{void}\ print()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{//\ Comparison\ operator\ (needed\ for\ std::set<Error>)}}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator<(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_error}{Error}}\&\ other)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(code)\ <\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(other.code);}
+\DoxyCodeLine{00052\ \ \ \ \ \}}
+\DoxyCodeLine{00053\ \};}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \textcolor{comment}{//\ Optional:\ allows\ printing\ ErrorCode\ directly\ to\ streams}}
+\DoxyCodeLine{00056\ std::ostream\&\ operator<<(std::ostream\&\ os,\ \textcolor{keyword}{const}\ ErrorCode\&\ c);}
+
+\end{DoxyCode}

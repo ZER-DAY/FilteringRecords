@@ -1,0 +1,28 @@
+\doxysection{Classifier.\+h}
+\hypertarget{_classifier_8h_source}{}\label{_classifier_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <map>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}Record.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}Rule.h"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ *\ Function:\ classify}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ *\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ *\ Classifies\ all\ records\ into\ their\ respective\ classes\ based\ on\ rules.}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ *\ Parameters:}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ *\ \ \ -\/\ records\ \ \ \ :\ list\ of\ records\ to\ classify}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ *\ \ \ -\/\ classRules\ :\ list\ of\ class\ definitions\ with\ rules}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ *\ Returns:}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ *\ \ \ A\ map\ where:}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ *\ \ \ \ \ -\/\ key\ \ \ =\ class\ name}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ *\ \ \ \ \ -\/\ value\ =\ list\ of\ record\ names\ that\ belong\ to\ this\ class}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00022\ std::map<std::string,\ std::vector<std::string>>}
+\DoxyCodeLine{00023\ classify(\textcolor{keyword}{const}\ std::vector<Record>\&\ records,\ \textcolor{keyword}{const}\ std::vector<ClassRule>\&\ classRules);}
+
+\end{DoxyCode}
