@@ -1,0 +1,236 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.14.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>RecordClassifier: Файл Parser.cpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">RecordClassifier<span id="projectnumber">&#160;1.0</span>
+   </div>
+   <div id="projectbrief">Консольная программа для классификации записей по набору правил</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.14.0 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Поиск',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('Parser_8cpp.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Загрузка...</div>
+<div class="SRStatus" id="Searching">Поиск...</div>
+<div class="SRStatus" id="NoMatches">Не найдено</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Файл Parser.cpp</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &quot;<a class="el" href="Parser_8h_source.html">Parser.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="Error_8h_source.html">Error.h</a>&quot;</code><br />
+<code>#include &lt;sstream&gt;</code><br />
+<code>#include &lt;cctype&gt;</code><br />
+<code>#include &lt;algorithm&gt;</code><br />
+<code>#include &lt;set&gt;</code><br />
+</div>
+<p><a href="Parser_8cpp_source.html">См. исходные тексты.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Функции</h2></td></tr>
+<tr class="memitem:a1a32c4d3bd87256731e67936766c65ca" id="r_a1a32c4d3bd87256731e67936766c65ca"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1a32c4d3bd87256731e67936766c65ca">trim</a> (const std::string &amp;s)</td></tr>
+<tr class="memitem:a21d3e964e5367d0afc2b054b8c458242" id="r_a21d3e964e5367d0afc2b054b8c458242"><td class="memItemLeft" align="right" valign="top">std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a21d3e964e5367d0afc2b054b8c458242">parseIntList</a> (const std::string &amp;inside)</td></tr>
+<tr class="memitem:a199dd9eab6cb67892269846456678de1" id="r_a199dd9eab6cb67892269846456678de1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a199dd9eab6cb67892269846456678de1">parse_record_line</a> (const std::string &amp;line, <a class="el" href="structRecord.html">Record</a> &amp;rec, std::set&lt; <a class="el" href="structError.html">Error</a> &gt; &amp;errors)</td></tr>
+<tr class="memitem:a2087cc11f01da169854e65ae7a9ada1c" id="r_a2087cc11f01da169854e65ae7a9ada1c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2087cc11f01da169854e65ae7a9ada1c">parse_class_line</a> (const std::string &amp;line, <a class="el" href="structClassRule.html">ClassRule</a> &amp;cr, std::set&lt; <a class="el" href="structError.html">Error</a> &gt; &amp;errors)</td></tr>
+</table>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Функции</h2>
+<a id="a2087cc11f01da169854e65ae7a9ada1c" name="a2087cc11f01da169854e65ae7a9ada1c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2087cc11f01da169854e65ae7a9ada1c">&#9670;&#160;</a></span>parse_class_line()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool parse_class_line </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>line</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structClassRule.html">ClassRule</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>cr</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::set&lt; <a class="el" href="structError.html">Error</a> &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>errors</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">См. определение в файле <a class="el" href="Parser_8cpp_source.html">Parser.cpp</a> строка <a class="el" href="Parser_8cpp_source.html#l00178">178</a></p>
+
+<p class="reference">Перекрестные ссылки <a class="el" href="ClassRule_8h_source.html#l00008">ClassRule::className</a>, <a class="el" href="Rule_8h_source.html#l00019">CONTAINS_VALUE</a>, <a class="el" href="Error_8h_source.html#l00017">EMPTY_CLASS_NAME</a>, <a class="el" href="Rule_8h_source.html#l00020">EQUALS_EXACTLY</a>, <a class="el" href="Rule_8h_source.html#l00040">Rule::expectedExactValues</a>, <a class="el" href="Rule_8h_source.html#l00038">Rule::expectedSize</a>, <a class="el" href="Rule_8h_source.html#l00039">Rule::expectedValue</a>, <a class="el" href="Rule_8h_source.html#l00017">HAS_PROPERTY</a>, <a class="el" href="Error_8h_source.html#l00012">INCORRECT_RULE</a>, <a class="el" href="Error_8h_source.html#l00019">INVALID_NUMERIC_VALUE</a>, <a class="el" href="Error_8h_source.html#l00015">MISSING_QUOTE</a>, <a class="el" href="Parser_8cpp_source.html#l00028">parseIntList()</a>, <a class="el" href="Rule_8h_source.html#l00018">PROPERTY_SIZE</a>, <a class="el" href="Rule_8h_source.html#l00037">Rule::propertyName</a>, <a class="el" href="ClassRule_8h_source.html#l00009">ClassRule::rules</a>, <a class="el" href="Parser_8cpp_source.html#l00013">trim()</a>, <a class="el" href="Rule_8h_source.html#l00036">Rule::type</a> и <a class="el" href="Error_8h_source.html#l00016">UNKNOWN_RULE_TYPE</a>.</p>
+
+<p class="reference">Используется в <a class="el" href="main_8cpp_source.html#l00020">main()</a>, <a class="el" href="ParseClassLineTests_8cpp_source.html#l00025">ParseClassLineTests::TEST_CLASS()</a>, <a class="el" href="IntegrationTests_8cpp_source.html#l00033">Tests::TEST_CLASS()</a> и <a class="el" href="RecordClassifierTests_8cpp_source.html#l00016">Tests::TEST_CLASS()</a>.</p>
+
+</div>
+</div>
+<a id="a199dd9eab6cb67892269846456678de1" name="a199dd9eab6cb67892269846456678de1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a199dd9eab6cb67892269846456678de1">&#9670;&#160;</a></span>parse_record_line()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool parse_record_line </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>line</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structRecord.html">Record</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>rec</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::set&lt; <a class="el" href="structError.html">Error</a> &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>errors</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">См. определение в файле <a class="el" href="Parser_8cpp_source.html">Parser.cpp</a> строка <a class="el" href="Parser_8cpp_source.html#l00062">62</a></p>
+
+<p class="reference">Перекрестные ссылки <a class="el" href="Error_8h_source.html#l00014">DUPLICATE_PROPERTY</a>, <a class="el" href="Error_8h_source.html#l00018">EMPTY_RECORD_NAME</a>, <a class="el" href="Error_8h_source.html#l00012">INCORRECT_RULE</a>, <a class="el" href="Error_8h_source.html#l00019">INVALID_NUMERIC_VALUE</a>, <a class="el" href="Error_8h_source.html#l00013">INVALID_RECORD</a>, <a class="el" href="Record_8h_source.html#l00039">Record::name</a>, <a class="el" href="Parser_8cpp_source.html#l00028">parseIntList()</a>, <a class="el" href="Record_8h_source.html#l00040">Record::properties</a>, <a class="el" href="Parser_8cpp_source.html#l00013">trim()</a> и <a class="el" href="Property_8h_source.html#l00008">Property::values</a>.</p>
+
+<p class="reference">Используется в <a class="el" href="main_8cpp_source.html#l00020">main()</a>, <a class="el" href="ParseRecordLineTests_8cpp_source.html#l00012">ParseRecordLineTests::TEST_CLASS()</a>, <a class="el" href="IntegrationTests_8cpp_source.html#l00033">Tests::TEST_CLASS()</a> и <a class="el" href="RecordClassifierTests_8cpp_source.html#l00016">Tests::TEST_CLASS()</a>.</p>
+
+</div>
+</div>
+<a id="a21d3e964e5367d0afc2b054b8c458242" name="a21d3e964e5367d0afc2b054b8c458242"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21d3e964e5367d0afc2b054b8c458242">&#9670;&#160;</a></span>parseIntList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; int &gt; parseIntList </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>inside</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">См. определение в файле <a class="el" href="Parser_8cpp_source.html">Parser.cpp</a> строка <a class="el" href="Parser_8cpp_source.html#l00028">28</a></p>
+
+<p class="reference">Используется в <a class="el" href="Parser_8cpp_source.html#l00178">parse_class_line()</a> и <a class="el" href="Parser_8cpp_source.html#l00062">parse_record_line()</a>.</p>
+
+</div>
+</div>
+<a id="a1a32c4d3bd87256731e67936766c65ca" name="a1a32c4d3bd87256731e67936766c65ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a32c4d3bd87256731e67936766c65ca">&#9670;&#160;</a></span>trim()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string trim </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>s</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">См. определение в файле <a class="el" href="Parser_8cpp_source.html">Parser.cpp</a> строка <a class="el" href="Parser_8cpp_source.html#l00013">13</a></p>
+
+<p class="reference">Используется в <a class="el" href="main_8cpp_source.html#l00020">main()</a>, <a class="el" href="Parser_8cpp_source.html#l00178">parse_class_line()</a>, <a class="el" href="Parser_8cpp_source.html#l00062">parse_record_line()</a>, <a class="el" href="IntegrationTests_8cpp_source.html#l00033">Tests::TEST_CLASS()</a> и <a class="el" href="TrimTests_8cpp_source.html#l00017">TrimTests::TEST_CLASS()</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="Parser_8cpp.html">Parser.cpp</a></li>
+    <li class="footer">Документация по RecordClassifier. Последние изменения: <span class="timestamp"></span>. Создано системой <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.14.0 </li>
+  </ul>
+</div>
+</body>
+</html>

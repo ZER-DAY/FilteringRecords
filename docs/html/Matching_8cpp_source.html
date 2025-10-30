@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.14.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>RecordClassifier: Исходный файл Matching.cpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">RecordClassifier<span id="projectnumber">&#160;1.0</span>
+   </div>
+   <div id="projectbrief">Консольная программа для классификации записей по набору правил</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.14.0 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Поиск',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('Matching_8cpp_source.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Загрузка...</div>
+<div class="SRStatus" id="Searching">Поиск...</div>
+<div class="SRStatus" id="NoMatches">Не найдено</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Matching.cpp</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="Matching_8cpp.html">См. документацию.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#include &quot;<a class="code" href="Matching_8h.html">Matching.h</a>&quot;</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"> * Function: match_rule</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> * --------------------</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> * Evaluates a single rule against a record.</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment"> */</span></div>
+<div class="foldopen" id="foldopen00008" data-start="{" data-end="}">
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno"><a class="line" href="Matching_8cpp.html#a2d68295c36130b5ec551735a57e4a757">    8</a></span><span class="keywordtype">bool</span> <a class="code hl_function" href="Matching_8cpp.html#a2d68295c36130b5ec551735a57e4a757">match_rule</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structRecord.html">Record</a>&amp; record, <span class="keyword">const</span> <a class="code hl_struct" href="structRule.html">Rule</a>&amp; rule) {</div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span>    <span class="keyword">auto</span> it = record.<a class="code hl_variable" href="structRecord.html#a228790120ca550b04809ba8a7fd0133d">properties</a>.find(rule.<a class="code hl_variable" href="structRule.html#a6d8525553d65e05ffb9beba3dce83a50">propertyName</a>);</div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>    <span class="keywordflow">if</span> (it == record.<a class="code hl_variable" href="structRecord.html#a228790120ca550b04809ba8a7fd0133d">properties</a>.end()) {</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>        <span class="keywordflow">if</span> (rule.<a class="code hl_variable" href="structRule.html#ab79d0aca5d16c2771e3019b76c4fc221">type</a> == <a class="code hl_enumvalue" href="Rule_8h.html#a0da2be5e4963c00e7d90bea0c5d6e299aad7d98ba2c9eab2346a8597ce2c61e46">HAS_PROPERTY</a>) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    }</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    <span class="keyword">const</span> <a class="code hl_struct" href="structProperty.html">Property</a>&amp; prop = it-&gt;second;</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    <span class="keywordflow">switch</span> (rule.<a class="code hl_variable" href="structRule.html#ab79d0aca5d16c2771e3019b76c4fc221">type</a>) {</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="Rule_8h.html#a0da2be5e4963c00e7d90bea0c5d6e299aad7d98ba2c9eab2346a8597ce2c61e46">HAS_PROPERTY</a>:</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="Rule_8h.html#a0da2be5e4963c00e7d90bea0c5d6e299abb18d63772c5024824afa18704aa7e08">PROPERTY_SIZE</a>:</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>        <span class="keywordflow">return</span> (<span class="keywordtype">int</span>)prop.<a class="code hl_variable" href="structProperty.html#a31db0c3b40c669f284edddf0dd5bd14f">values</a>.size() == rule.<a class="code hl_variable" href="structRule.html#ae27abc6df1e463c29e28eebf6a605bfb">expectedSize</a>;</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="Rule_8h.html#a0da2be5e4963c00e7d90bea0c5d6e299af6d449741b7b181f6f0c8572b3c73b4d">CONTAINS_VALUE</a>:</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> v : prop.<a class="code hl_variable" href="structProperty.html#a31db0c3b40c669f284edddf0dd5bd14f">values</a>)</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>            <span class="keywordflow">if</span> (v == rule.<a class="code hl_variable" href="structRule.html#a7b7154952fa02ecfbd032cc9269d6118">expectedValue</a>) <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="Rule_8h.html#a0da2be5e4963c00e7d90bea0c5d6e299a21b297b0d5ed5b81647d9575f8cc5c25">EQUALS_EXACTLY</a>:</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        <span class="keywordflow">return</span> prop.<a class="code hl_variable" href="structProperty.html#a31db0c3b40c669f284edddf0dd5bd14f">values</a> == rule.<a class="code hl_variable" href="structRule.html#a6865ce5ea6939f406169b560347bd553">expectedExactValues</a>;</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="keywordflow">default</span>:</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    }</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>}</div>
+</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="comment"> * Function: match_all_rules</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="comment"> * -------------------------</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="comment"> * Returns true if the record satisfies all rules of a given class.</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="comment"> */</span></div>
+<div class="foldopen" id="foldopen00041" data-start="{" data-end="}">
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno"><a class="line" href="Matching_8cpp.html#a7cbd9b21473a73d33379e75df340e4e8">   41</a></span><span class="keywordtype">bool</span> <a class="code hl_function" href="Matching_8cpp.html#a7cbd9b21473a73d33379e75df340e4e8">match_all_rules</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structRecord.html">Record</a>&amp; record, <span class="keyword">const</span> <a class="code hl_struct" href="structClassRule.html">ClassRule</a>&amp; classRule) {</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; r : classRule.<a class="code hl_variable" href="structClassRule.html#a0e13506a70745421536492e17fd5876e">rules</a>) {</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        <span class="keywordflow">if</span> (!<a class="code hl_function" href="Matching_8cpp.html#a2d68295c36130b5ec551735a57e4a757">match_rule</a>(record, r))</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    }</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>}</div>
+</div>
+<div class="ttc" id="aMatching_8cpp_html_a2d68295c36130b5ec551735a57e4a757"><div class="ttname"><a href="Matching_8cpp.html#a2d68295c36130b5ec551735a57e4a757">match_rule</a></div><div class="ttdeci">bool match_rule(const Record &amp;record, const Rule &amp;rule)</div><div class="ttdef"><b>Определения</b> <a href="#l00008">Matching.cpp:8</a></div></div>
+<div class="ttc" id="aMatching_8cpp_html_a7cbd9b21473a73d33379e75df340e4e8"><div class="ttname"><a href="Matching_8cpp.html#a7cbd9b21473a73d33379e75df340e4e8">match_all_rules</a></div><div class="ttdeci">bool match_all_rules(const Record &amp;record, const ClassRule &amp;classRule)</div><div class="ttdef"><b>Определения</b> <a href="#l00041">Matching.cpp:41</a></div></div>
+<div class="ttc" id="aMatching_8h_html"><div class="ttname"><a href="Matching_8h.html">Matching.h</a></div></div>
+<div class="ttc" id="aRule_8h_html_a0da2be5e4963c00e7d90bea0c5d6e299a21b297b0d5ed5b81647d9575f8cc5c25"><div class="ttname"><a href="Rule_8h.html#a0da2be5e4963c00e7d90bea0c5d6e299a21b297b0d5ed5b81647d9575f8cc5c25">EQUALS_EXACTLY</a></div><div class="ttdeci">@ EQUALS_EXACTLY</div><div class="ttdef"><b>Определения</b> <a href="Rule_8h_source.html#l00020">Rule.h:20</a></div></div>
+<div class="ttc" id="aRule_8h_html_a0da2be5e4963c00e7d90bea0c5d6e299aad7d98ba2c9eab2346a8597ce2c61e46"><div class="ttname"><a href="Rule_8h.html#a0da2be5e4963c00e7d90bea0c5d6e299aad7d98ba2c9eab2346a8597ce2c61e46">HAS_PROPERTY</a></div><div class="ttdeci">@ HAS_PROPERTY</div><div class="ttdef"><b>Определения</b> <a href="Rule_8h_source.html#l00017">Rule.h:17</a></div></div>
+<div class="ttc" id="aRule_8h_html_a0da2be5e4963c00e7d90bea0c5d6e299abb18d63772c5024824afa18704aa7e08"><div class="ttname"><a href="Rule_8h.html#a0da2be5e4963c00e7d90bea0c5d6e299abb18d63772c5024824afa18704aa7e08">PROPERTY_SIZE</a></div><div class="ttdeci">@ PROPERTY_SIZE</div><div class="ttdef"><b>Определения</b> <a href="Rule_8h_source.html#l00018">Rule.h:18</a></div></div>
+<div class="ttc" id="aRule_8h_html_a0da2be5e4963c00e7d90bea0c5d6e299af6d449741b7b181f6f0c8572b3c73b4d"><div class="ttname"><a href="Rule_8h.html#a0da2be5e4963c00e7d90bea0c5d6e299af6d449741b7b181f6f0c8572b3c73b4d">CONTAINS_VALUE</a></div><div class="ttdeci">@ CONTAINS_VALUE</div><div class="ttdef"><b>Определения</b> <a href="Rule_8h_source.html#l00019">Rule.h:19</a></div></div>
+<div class="ttc" id="astructClassRule_html"><div class="ttname"><a href="structClassRule.html">ClassRule</a></div><div class="ttdef"><b>Определения</b> <a href="ClassRule_8h_source.html#l00007">ClassRule.h:7</a></div></div>
+<div class="ttc" id="astructClassRule_html_a0e13506a70745421536492e17fd5876e"><div class="ttname"><a href="structClassRule.html#a0e13506a70745421536492e17fd5876e">ClassRule::rules</a></div><div class="ttdeci">std::vector&lt; Rule &gt; rules</div><div class="ttdef"><b>Определения</b> <a href="ClassRule_8h_source.html#l00009">ClassRule.h:9</a></div></div>
+<div class="ttc" id="astructProperty_html"><div class="ttname"><a href="structProperty.html">Property</a></div><div class="ttdef"><b>Определения</b> <a href="Property_8h_source.html#l00006">Property.h:6</a></div></div>
+<div class="ttc" id="astructProperty_html_a31db0c3b40c669f284edddf0dd5bd14f"><div class="ttname"><a href="structProperty.html#a31db0c3b40c669f284edddf0dd5bd14f">Property::values</a></div><div class="ttdeci">std::vector&lt; int &gt; values</div><div class="ttdef"><b>Определения</b> <a href="Property_8h_source.html#l00008">Property.h:8</a></div></div>
+<div class="ttc" id="astructRecord_html"><div class="ttname"><a href="structRecord.html">Record</a></div><div class="ttdef"><b>Определения</b> <a href="Record_8h_source.html#l00038">Record.h:38</a></div></div>
+<div class="ttc" id="astructRecord_html_a228790120ca550b04809ba8a7fd0133d"><div class="ttname"><a href="structRecord.html#a228790120ca550b04809ba8a7fd0133d">Record::properties</a></div><div class="ttdeci">std::map&lt; std::string, Property &gt; properties</div><div class="ttdef"><b>Определения</b> <a href="Record_8h_source.html#l00040">Record.h:40</a></div></div>
+<div class="ttc" id="astructRule_html"><div class="ttname"><a href="structRule.html">Rule</a></div><div class="ttdef"><b>Определения</b> <a href="Rule_8h_source.html#l00035">Rule.h:35</a></div></div>
+<div class="ttc" id="astructRule_html_a6865ce5ea6939f406169b560347bd553"><div class="ttname"><a href="structRule.html#a6865ce5ea6939f406169b560347bd553">Rule::expectedExactValues</a></div><div class="ttdeci">std::vector&lt; int &gt; expectedExactValues</div><div class="ttdef"><b>Определения</b> <a href="Rule_8h_source.html#l00040">Rule.h:40</a></div></div>
+<div class="ttc" id="astructRule_html_a6d8525553d65e05ffb9beba3dce83a50"><div class="ttname"><a href="structRule.html#a6d8525553d65e05ffb9beba3dce83a50">Rule::propertyName</a></div><div class="ttdeci">std::string propertyName</div><div class="ttdef"><b>Определения</b> <a href="Rule_8h_source.html#l00037">Rule.h:37</a></div></div>
+<div class="ttc" id="astructRule_html_a7b7154952fa02ecfbd032cc9269d6118"><div class="ttname"><a href="structRule.html#a7b7154952fa02ecfbd032cc9269d6118">Rule::expectedValue</a></div><div class="ttdeci">int expectedValue</div><div class="ttdef"><b>Определения</b> <a href="Rule_8h_source.html#l00039">Rule.h:39</a></div></div>
+<div class="ttc" id="astructRule_html_ab79d0aca5d16c2771e3019b76c4fc221"><div class="ttname"><a href="structRule.html#ab79d0aca5d16c2771e3019b76c4fc221">Rule::type</a></div><div class="ttdeci">RuleType type</div><div class="ttdef"><b>Определения</b> <a href="Rule_8h_source.html#l00036">Rule.h:36</a></div></div>
+<div class="ttc" id="astructRule_html_ae27abc6df1e463c29e28eebf6a605bfb"><div class="ttname"><a href="structRule.html#ae27abc6df1e463c29e28eebf6a605bfb">Rule::expectedSize</a></div><div class="ttdeci">int expectedSize</div><div class="ttdef"><b>Определения</b> <a href="Rule_8h_source.html#l00038">Rule.h:38</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="Matching_8cpp.html">Matching.cpp</a></li>
+    <li class="footer">Документация по RecordClassifier. Последние изменения: <span class="timestamp"></span>. Создано системой <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.14.0 </li>
+  </ul>
+</div>
+</body>
+</html>

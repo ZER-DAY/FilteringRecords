@@ -1,111 +1,635 @@
-\chapter{📘 Тема\+: Классификация записей по набору правил }
-\hypertarget{md__r_e_a_d_m_e}{}\label{md__r_e_a_d_m_e}\index{📘 Тема: Классификация записей по набору правил@{📘 Тема: Классификация записей по набору правил}}
+\chapter{Record\+Classifier / Классификация записей по набору правил }
+\hypertarget{md__r_e_a_d_m_e}{}\label{md__r_e_a_d_m_e}\index{RecordClassifier / Классификация записей по набору правил@{RecordClassifier / Классификация записей по набору правил}}
 \label{md__r_e_a_d_m_e_autotoc_md0}%
 \Hypertarget{md__r_e_a_d_m_e_autotoc_md0}%
 
 
-{\bfseries{Студент\+:}} Алхабил Бахаа А.\+М. ~\newline
- {\bfseries{Преподаватель\+:}} \mbox{[}доц. Сычев О.\+А.\mbox{]} ~\newline
- {\bfseries{Дисциплина\+:}} Качество и надёжность программного обеспечения ~\newline
- {\bfseries{Учебное заведение\+:}} Волгоградский государственный технический университет ~\newline
- {\bfseries{Год\+:}} 2025
+{\bfseries{Консольная программа для автоматической классификации записей на основе заданных правил}}
 
 \DoxyHorRuler{0}
-\hypertarget{md__r_e_a_d_m_e_autotoc_md2}{}\doxysection{\texorpdfstring{📌 1. Назначение программы}{📌 1. Назначение программы}}\label{md__r_e_a_d_m_e_autotoc_md2}
-Программа {\bfseries{Record\+Classifier}} предназначена для автоматического анализа входных данных, проверки корректности структуры записей и правил, а также их классификации по заданным критериям. ~\newline
- Система моделирует базовый классификатор, который разбивает объекты на классы по заданным признакам (свойствам).
-
-📊 Пример практического применения\+: фильтрация товаров, анализ характеристик объектов, категоризация данных.
-
-\DoxyHorRuler{0}
-\hypertarget{md__r_e_a_d_m_e_autotoc_md4}{}\doxysection{\texorpdfstring{🎯 2. Цели и задачи проекта}{🎯 2. Цели и задачи проекта}}\label{md__r_e_a_d_m_e_autotoc_md4}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md2}{}\doxysection{\texorpdfstring{Оглавление}{Оглавление}}\label{md__r_e_a_d_m_e_autotoc_md2}
 
 \begin{DoxyItemize}
-\item Разработать систему чтения и синтаксического анализа входных данных.
-\item Реализовать проверку валидности данных (валидацию).
-\item Создать механизм классификации записей на основе набора правил.
-\item Обеспечить тестирование всех функций согласно протоколу испытаний (Приложения 1–5).
-\item Обеспечить корректность и устойчивость работы программы при некорректных данных и стресс-\/нагрузках.
+\item О проекте
+\item Возможности
+\item Архитектура
+\item Установка и запуск
+\item Формат входных данных
+\item Примеры использования
+\item Обработка ошибок
+\item Тестирование
+\item Документация
+\item Авторы
 \end{DoxyItemize}
 
 \DoxyHorRuler{0}
-\hypertarget{md__r_e_a_d_m_e_autotoc_md6}{}\doxysection{\texorpdfstring{🧠 3. Основные функции программы}{🧠 3. Основные функции программы}}\label{md__r_e_a_d_m_e_autotoc_md6}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md4}{}\doxysection{\texorpdfstring{О проекте}{О проекте}}\label{md__r_e_a_d_m_e_autotoc_md4}
+{\bfseries{Record\+Classifier}} — консольное приложение для классификации записей по набору правил. Программа анализирует объекты с различными свойствами и автоматически распределяет их по классам в соответствии с заданными критериями.\hypertarget{md__r_e_a_d_m_e_autotoc_md5}{}\doxysubsection{\texorpdfstring{Назначение}{Назначение}}\label{md__r_e_a_d_m_e_autotoc_md5}
+Программа предназначена для\+:
+
+
+\begin{DoxyItemize}
+\item Автоматической классификации объектов по заданным признакам
+\item Проверки корректности входных данных
+\item Формирования структурированных отчетов о классификации
+\item Обработки больших объемов данных (поддержка до 1000+ записей)
+\end{DoxyItemize}\hypertarget{md__r_e_a_d_m_e_autotoc_md6}{}\doxysubsection{\texorpdfstring{Области применения}{Области применения}}\label{md__r_e_a_d_m_e_autotoc_md6}
+
+\begin{DoxyItemize}
+\item Классификация товаров и продукции
+\item Категоризация данных в базах данных
+\item Автоматическая обработка структурированной информации
+\item Валидация и фильтрация данных
+\end{DoxyItemize}
+
+\DoxyHorRuler{0}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md8}{}\doxysection{\texorpdfstring{Возможности}{Возможности}}\label{md__r_e_a_d_m_e_autotoc_md8}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md9}{}\doxysubsection{\texorpdfstring{Функциональные возможности}{Функциональные возможности}}\label{md__r_e_a_d_m_e_autotoc_md9}
+
+\begin{DoxyItemize}
+\item {\bfseries{Парсинг входных данных}} — чтение и разбор файлов {\ttfamily items.\+txt} и {\ttfamily rules.\+txt}
+\item {\bfseries{Валидация данных}} — проверка синтаксиса, типов и уникальности свойств
+\item {\bfseries{Классификация}} — сопоставление записей с правилами четырех типов
+\item {\bfseries{Генерация отчетов}} — вывод результатов на экран и в файл {\ttfamily output.\+txt}
+\item {\bfseries{Обработка ошибок}} — детальные сообщения при некорректных входных данных
+\end{DoxyItemize}\hypertarget{md__r_e_a_d_m_e_autotoc_md10}{}\doxysubsection{\texorpdfstring{Поддерживаемые типы правил}{Поддерживаемые типы правил}}\label{md__r_e_a_d_m_e_autotoc_md10}
 \tabulinesep=1mm
-\begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
+\begin{longtabu}spread 0pt [c]{*{3}{|X[-1]}|}
 \hline
-\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Функция  }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Назначение  }\\\cline{1-2}
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Тип правила  }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Описание  }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Пример  }\\\cline{1-3}
 \endfirsthead
 \hline
 \endfoot
 \hline
-\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Функция  }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Назначение  }\\\cline{1-2}
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Тип правила  }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Описание  }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Пример  }\\\cline{1-3}
 \endhead
-{\ttfamily parse\+\_\+record\+\_\+line}  &Разбор строк с описанием объектов и их свойств  \\\cline{1-2}
-{\ttfamily parse\+\_\+class\+\_\+line}  &Разбор строк с правилами классификации  \\\cline{1-2}
-{\ttfamily validate\+\_\+records}  &Проверка корректности записей (наличие свойств, отсутствие дублей и т.\+д.)  \\\cline{1-2}
-{\ttfamily validate\+\_\+classes}  &Проверка корректности правил классификации  \\\cline{1-2}
-{\ttfamily classify}  &Сопоставление записей и правил и распределение по соответствующим классам  \\\cline{1-2}
+{\ttfamily HAS\+\_\+\+PROPERTY}  &Наличие свойства с заданным именем  &{\ttfamily has property "{}doors"{}}  \\\cline{1-3}
+{\ttfamily PROPERTY\+\_\+\+SIZE}  &Количество значений свойства  &{\ttfamily property "{}wheels"{} has 2 values}  \\\cline{1-3}
+{\ttfamily CONTAINS\+\_\+\+VALUE}  &Наличие конкретного значения  &{\ttfamily property "{}color"{} contains value 2}  \\\cline{1-3}
+{\ttfamily EQUALS\+\_\+\+EXACTLY}  &Полное совпадение массива значений  &{\ttfamily property "{}seats"{} = \mbox{[}40\mbox{]}}  \\\cline{1-3}
 \end{longtabu}
 
 
 \DoxyHorRuler{0}
-\hypertarget{md__r_e_a_d_m_e_autotoc_md8}{}\doxysection{\texorpdfstring{🧰 4. Структура данных}{🧰 4. Структура данных}}\label{md__r_e_a_d_m_e_autotoc_md8}
-\hypertarget{md__r_e_a_d_m_e_autotoc_md9}{}\doxysubsection{\texorpdfstring{Структура {\ttfamily Record}}{Структура {\ttfamily Record}}}\label{md__r_e_a_d_m_e_autotoc_md9}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md12}{}\doxysection{\texorpdfstring{Архитектура}{Архитектура}}\label{md__r_e_a_d_m_e_autotoc_md12}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md13}{}\doxysubsection{\texorpdfstring{Структура проекта}{Структура проекта}}\label{md__r_e_a_d_m_e_autotoc_md13}
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{\textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_record}{Record}}\ \{}
-\DoxyCodeLine{\ \ \ \ std::string\ name;}
-\DoxyCodeLine{\ \ \ \ std::map<std::string,\ Property>\ properties;}
-\DoxyCodeLine{\};}
+\DoxyCodeLine{FilteringRecords/}
+\DoxyCodeLine{├──\ Header\ Files/}
+\DoxyCodeLine{│\ \ \ ├──\ Classifier.h\ \ \ \ \ \ \ \ \ \#\ Логика\ классификации}
+\DoxyCodeLine{│\ \ \ ├──\ ClassRule.h\ \ \ \ \ \ \ \ \ \ \#\ Структура\ правил\ классификации}
+\DoxyCodeLine{│\ \ \ ├──\ DataCheckResult.h\ \ \ \ \#\ Результаты\ валидации}
+\DoxyCodeLine{│\ \ \ ├──\ Error.h\ \ \ \ \ \ \ \ \ \ \ \ \ \ \#\ Обработка\ ошибок}
+\DoxyCodeLine{│\ \ \ ├──\ Matching.h\ \ \ \ \ \ \ \ \ \ \ \#\ Сопоставление\ записей\ и\ правил}
+\DoxyCodeLine{│\ \ \ ├──\ Parser.h\ \ \ \ \ \ \ \ \ \ \ \ \ \#\ Парсинг\ входных\ файлов}
+\DoxyCodeLine{│\ \ \ ├──\ Property.h\ \ \ \ \ \ \ \ \ \ \ \#\ Структура\ свойств}
+\DoxyCodeLine{│\ \ \ ├──\ Record.h\ \ \ \ \ \ \ \ \ \ \ \ \ \#\ Структура\ записей}
+\DoxyCodeLine{│\ \ \ ├──\ Rule.h\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \#\ Типы\ правил}
+\DoxyCodeLine{│\ \ \ └──\ Validation.h\ \ \ \ \ \ \ \ \ \#\ Валидация\ данных}
+\DoxyCodeLine{│}
+\DoxyCodeLine{├──\ Source\ Files/}
+\DoxyCodeLine{│\ \ \ ├──\ Classifier.cpp\ \ \ \ \ \ \ \#\ Реализация\ классификации}
+\DoxyCodeLine{│\ \ \ ├──\ Error.cpp\ \ \ \ \ \ \ \ \ \ \ \ \#\ Реализация\ обработки\ ошибок}
+\DoxyCodeLine{│\ \ \ ├──\ main.cpp\ \ \ \ \ \ \ \ \ \ \ \ \ \#\ Точка\ входа\ программы}
+\DoxyCodeLine{│\ \ \ ├──\ Match.cpp\ \ \ \ \ \ \ \ \ \ \ \ \#\ Реализация\ сопоставления}
+\DoxyCodeLine{│\ \ \ ├──\ Parser.cpp\ \ \ \ \ \ \ \ \ \ \ \#\ Реализация\ парсера}
+\DoxyCodeLine{│\ \ \ ├──\ Record.cpp\ \ \ \ \ \ \ \ \ \ \ \#\ Реализация\ работы\ с\ записями}
+\DoxyCodeLine{│\ \ \ └──\ Validation.cpp\ \ \ \ \ \ \ \#\ Реализация\ валидации}
+\DoxyCodeLine{│}
+\DoxyCodeLine{├──\ images/}
+\DoxyCodeLine{│\ \ \ ├──\ uml-\/class-\/diagram.png}
+\DoxyCodeLine{│\ \ \ ├──\ function-\/call-\/diagram.png}
+\DoxyCodeLine{│\ \ \ └──\ data-\/flow-\/diagram.png}
+\DoxyCodeLine{│}
+\DoxyCodeLine{└──\ FilteringRecordsTests/\ \ \ \#\ Unit-\/тесты\ (45\ тестов)}
 
 \end{DoxyCode}
-\hypertarget{md__r_e_a_d_m_e_autotoc_md10}{}\doxysubsection{\texorpdfstring{Структура {\ttfamily Property}}{Структура {\ttfamily Property}}}\label{md__r_e_a_d_m_e_autotoc_md10}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md14}{}\doxysubsection{\texorpdfstring{Основные структуры данных}{Основные структуры данных}}\label{md__r_e_a_d_m_e_autotoc_md14}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md15}{}\doxysubsubsection{\texorpdfstring{Property (Свойство)}{Property (Свойство)}}\label{md__r_e_a_d_m_e_autotoc_md15}
 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{\textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_property}{Property}}\ \{}
-\DoxyCodeLine{\ \ \ \ std::string\ name;}
-\DoxyCodeLine{\ \ \ \ std::vector<int>\ values;}
+\DoxyCodeLine{\ \ \ \ std::string\ name;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Имя\ свойства}}
+\DoxyCodeLine{\ \ \ \ std::vector<int>\ values;\ \ \ \ \textcolor{comment}{//\ Массив\ целочисленных\ значений}}
 \DoxyCodeLine{\};}
 
 \end{DoxyCode}
-\hypertarget{md__r_e_a_d_m_e_autotoc_md11}{}\doxysubsection{\texorpdfstring{Структура {\ttfamily Class\+Rule и Rule}}{Структура {\ttfamily Class\+Rule и Rule}}}\label{md__r_e_a_d_m_e_autotoc_md11}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md16}{}\doxysubsubsection{\texorpdfstring{Record (Запись)}{Record (Запись)}}\label{md__r_e_a_d_m_e_autotoc_md16}
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{\textcolor{keyword}{enum}\ RuleType\ \{\ HAS\_PROPERTY,\ PROPERTY\_SIZE,\ CONTAINS\_VALUE,\ EQUALS\_EXACTLY\ \};}
+\DoxyCodeLine{\textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_record}{Record}}\ \{}
+\DoxyCodeLine{\ \ \ \ std::string\ name;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Имя\ записи}}
+\DoxyCodeLine{\ \ \ \ std::map<std::string,\ Property>\ properties;\ \textcolor{comment}{//\ Словарь\ свойств}}
+\DoxyCodeLine{\};}
+
+\end{DoxyCode}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md17}{}\doxysubsubsection{\texorpdfstring{Rule (Правило)}{Rule (Правило)}}\label{md__r_e_a_d_m_e_autotoc_md17}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{enum}\ RuleType\ \{}
+\DoxyCodeLine{\ \ \ \ HAS\_PROPERTY,\ \ \ \ \ \ \textcolor{comment}{//\ Проверка\ наличия\ свойства}}
+\DoxyCodeLine{\ \ \ \ PROPERTY\_SIZE,\ \ \ \ \ \textcolor{comment}{//\ Проверка\ количества\ значений}}
+\DoxyCodeLine{\ \ \ \ CONTAINS\_VALUE,\ \ \ \ \textcolor{comment}{//\ Проверка\ наличия\ конкретного\ значения}}
+\DoxyCodeLine{\ \ \ \ EQUALS\_EXACTLY\ \ \ \ \ \textcolor{comment}{//\ Проверка\ полного\ совпадения}}
+\DoxyCodeLine{\};}
 \DoxyCodeLine{}
 \DoxyCodeLine{\textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_rule}{Rule}}\ \{}
-\DoxyCodeLine{\ \ \ \ RuleType\ type;}
-\DoxyCodeLine{\ \ \ \ std::string\ propertyName;}
-\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{int}\ expectedSize;}
-\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{int}\ expectedValue;}
-\DoxyCodeLine{\ \ \ \ std::vector<int>\ expectedExactValues;}
+\DoxyCodeLine{\ \ \ \ RuleType\ type;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Тип\ правила}}
+\DoxyCodeLine{\ \ \ \ std::string\ propertyName;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Имя\ свойства}}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{int}\ expectedSize;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ожидаемое\ количество\ (для\ PROPERTY\_SIZE)}}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{int}\ expectedValue;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ожидаемое\ значение\ (для\ CONTAINS\_VALUE)}}
+\DoxyCodeLine{\ \ \ \ std::vector<int>\ expectedExactValues;\ \textcolor{comment}{//\ Эталонный\ массив\ (для\ EQUALS\_EXACTLY)}}
 \DoxyCodeLine{\};}
-\DoxyCodeLine{}
+
+\end{DoxyCode}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md18}{}\doxysubsubsection{\texorpdfstring{Class\+Rule (Класс с правилами)}{Class\+Rule (Класс с правилами)}}\label{md__r_e_a_d_m_e_autotoc_md18}
+
+\begin{DoxyCode}{0}
 \DoxyCodeLine{\textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_class_rule}{ClassRule}}\ \{}
-\DoxyCodeLine{\ \ \ \ std::string\ className;}
-\DoxyCodeLine{\ \ \ \ std::vector<Rule>\ rules;}
+\DoxyCodeLine{\ \ \ \ std::string\ className;\ \ \ \ \ \ \textcolor{comment}{//\ Имя\ класса}}
+\DoxyCodeLine{\ \ \ \ std::vector<Rule>\ rules;\ \ \ \ \textcolor{comment}{//\ Список\ правил}}
 \DoxyCodeLine{\};}
+
+\end{DoxyCode}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md19}{}\doxysubsection{\texorpdfstring{UML-\/диаграмма классов}{UML-\/диаграмма классов}}\label{md__r_e_a_d_m_e_autotoc_md19}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md20}{}\doxysubsection{\texorpdfstring{Диаграмма вызовов функций}{Диаграмма вызовов функций}}\label{md__r_e_a_d_m_e_autotoc_md20}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md21}{}\doxysubsection{\texorpdfstring{Диаграмма потоков данных}{Диаграмма потоков данных}}\label{md__r_e_a_d_m_e_autotoc_md21}
+
+
+\DoxyHorRuler{0}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md23}{}\doxysection{\texorpdfstring{Установка и запуск}{Установка и запуск}}\label{md__r_e_a_d_m_e_autotoc_md23}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md24}{}\doxysubsection{\texorpdfstring{Требования}{Требования}}\label{md__r_e_a_d_m_e_autotoc_md24}
+{\bfseries{Аппаратные требования\+:}}
+
+
+\begin{DoxyItemize}
+\item Процессор\+: Intel Core i3 или выше
+\item ОЗУ\+: 4 ГБ минимум
+\end{DoxyItemize}
+
+{\bfseries{Программное обеспечение\+:}}
+
+
+\begin{DoxyItemize}
+\item Операционная система\+: Windows 10/11
+\item Компилятор\+: Microsoft Visual Studio 2019 или выше
+\item Стандарт C++\+: C++17
+\end{DoxyItemize}\hypertarget{md__r_e_a_d_m_e_autotoc_md25}{}\doxysubsection{\texorpdfstring{Компиляция}{Компиляция}}\label{md__r_e_a_d_m_e_autotoc_md25}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md26}{}\doxysubsubsection{\texorpdfstring{Через Visual Studio}{Через Visual Studio}}\label{md__r_e_a_d_m_e_autotoc_md26}
+
+\begin{DoxyEnumerate}
+\item Откройте решение {\ttfamily Filtering\+Records.\+sln} в Visual Studio 2019
+\item Выберите конфигурацию {\bfseries{Release}} или {\bfseries{Debug}}
+\item Нажмите {\bfseries{Build → Build Solution}} (Ctrl+\+Shift+B)
+\item Исполняемый файл появится в папке {\ttfamily x64/\+Release/} или {\ttfamily x64/\+Debug/}
+\end{DoxyEnumerate}\hypertarget{md__r_e_a_d_m_e_autotoc_md27}{}\doxysubsubsection{\texorpdfstring{Через командную строку}{Через командную строку}}\label{md__r_e_a_d_m_e_autotoc_md27}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\#\ С\ использованием\ g++\ (MinGW)}
+\DoxyCodeLine{g++\ -\/std=c++17\ -\/O2\ -\/o\ RecordClassifier.exe\ main.cpp\ Parser.cpp\ Validation.cpp\ Classifier.cpp\ Match.cpp\ Error.cpp\ Record.cpp}
+\DoxyCodeLine{}
+\DoxyCodeLine{\#\ С\ использованием\ MSVC}
+\DoxyCodeLine{cl\ /EHsc\ /std:c++17\ /Fe:RecordClassifier.exe\ main.cpp\ Parser.cpp\ Validation.cpp\ Classifier.cpp\ Match.cpp\ Error.cpp\ Record.cpp}
+
+\end{DoxyCode}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md28}{}\doxysubsection{\texorpdfstring{Запуск программы}{Запуск программы}}\label{md__r_e_a_d_m_e_autotoc_md28}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{RecordClassifier.exe\ items.txt\ rules.txt\ output.txt}
+
+\end{DoxyCode}
+
+
+{\bfseries{Параметры командной строки\+:}}
+
+
+\begin{DoxyEnumerate}
+\item {\ttfamily items.\+txt} — файл с записями
+\item {\ttfamily rules.\+txt} — файл с правилами классификации
+\item {\ttfamily output.\+txt} — имя выходного файла для результатов
+\end{DoxyEnumerate}
+
+\DoxyHorRuler{0}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md30}{}\doxysection{\texorpdfstring{Формат входных данных}{Формат входных данных}}\label{md__r_e_a_d_m_e_autotoc_md30}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md31}{}\doxysubsection{\texorpdfstring{Файл records (items.\+txt)}{Файл records (items.\+txt)}}\label{md__r_e_a_d_m_e_autotoc_md31}
+Каждая запись описывается в формате\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{<Имя\_записи>:\ <свойство1>\ =\ [значения],\ <свойство2>\ =\ [значения],\ ...}
+
+\end{DoxyCode}
+
+
+{\bfseries{Правила\+:}}
+
+
+\begin{DoxyItemize}
+\item Имя записи должно быть уникальным
+\item Имена свойств должны быть уникальными в пределах одной записи
+\item Значения свойств — целые числа в диапазоне {\ttfamily \mbox{[}-\/2147483648 ... 2147483647\mbox{]}}
+\item Значения указываются в квадратных скобках через запятую
+\end{DoxyItemize}
+
+{\bfseries{Пример\+:}}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Car:\ color\ =\ [2],\ doors\ =\ [4],\ engine\ =\ [2000]}
+\DoxyCodeLine{Bike:\ color\ =\ [3],\ wheels\ =\ [2]}
+\DoxyCodeLine{Bus:\ color\ =\ [2,\ 3],\ doors\ =\ [2],\ seats\ =\ [40]}
+\DoxyCodeLine{Truck:\ color\ =\ [1],\ doors\ =\ [2],\ wheels\ =\ [6],\ capacity\ =\ [5000]}
+
+\end{DoxyCode}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md32}{}\doxysubsection{\texorpdfstring{Файл rules (rules.\+txt)}{Файл rules (rules.\+txt)}}\label{md__r_e_a_d_m_e_autotoc_md32}
+Каждое правило описывается в формате\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{<Имя\_класса>:\ <условие>}
+
+\end{DoxyCode}
+
+
+{\bfseries{Поддерживаемые условия\+:}}
+
+
+\begin{DoxyEnumerate}
+\item {\bfseries{Наличие свойства\+:}}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Has\ doors:\ has\ property\ "{}doors"{}}
+
+\end{DoxyCode}
+
+\item {\bfseries{Количество значений\+:}}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Two\ wheels:\ property\ "{}wheels"{}\ has\ 2\ values}
+
+\end{DoxyCode}
+
+\item {\bfseries{Наличие конкретного значения\+:}}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Red\ vehicle:\ property\ "{}color"{}\ contains\ value\ 2}
+
+\end{DoxyCode}
+
+\item {\bfseries{Полное совпадение массива\+:}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Big\ bus:\ property\ "{}seats"{}\ =\ [40]}
+
+\end{DoxyCode}
+
+\end{DoxyEnumerate}
+
+{\bfseries{Пример полного файла\+:}}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Has\ doors:\ has\ property\ "{}doors"{}}
+\DoxyCodeLine{Two\ wheels:\ property\ "{}wheels"{}\ has\ 2\ values}
+\DoxyCodeLine{Red\ vehicle:\ property\ "{}color"{}\ contains\ value\ 2}
+\DoxyCodeLine{Blue\ vehicle:\ property\ "{}color"{}\ contains\ value\ 3}
+\DoxyCodeLine{Big\ bus:\ property\ "{}seats"{}\ =\ [40]}
+\DoxyCodeLine{Heavy\ truck:\ property\ "{}capacity"{}\ =\ [5000]}
+
+\end{DoxyCode}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md33}{}\doxysubsection{\texorpdfstring{Выходной файл (output.\+txt)}{Выходной файл (output.\+txt)}}\label{md__r_e_a_d_m_e_autotoc_md33}
+Формат результата\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{<Имя\_класса>:\ <Список\_записей\_через\_запятую>}
+
+\end{DoxyCode}
+
+
+Если ни одна запись не соответствует классу, выводится символ {\ttfamily "{}-\/"{}}.
+
+{\bfseries{Пример\+:}}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Has\ doors:\ Car,\ Bus,\ Truck}
+\DoxyCodeLine{Two\ wheels:\ Bike}
+\DoxyCodeLine{Red\ vehicle:\ Car,\ Bus}
+\DoxyCodeLine{Blue\ vehicle:\ Bike}
+\DoxyCodeLine{Big\ bus:\ Bus}
+\DoxyCodeLine{Heavy\ truck:\ Truck}
 
 \end{DoxyCode}
 
 
 \DoxyHorRuler{0}
-\hypertarget{md__r_e_a_d_m_e_autotoc_md13}{}\doxysubsection{\texorpdfstring{5. Архитектура проекта}{5. Архитектура проекта}}\label{md__r_e_a_d_m_e_autotoc_md13}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md35}{}\doxysection{\texorpdfstring{Примеры использования}{Примеры использования}}\label{md__r_e_a_d_m_e_autotoc_md35}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md36}{}\doxysubsection{\texorpdfstring{Пример 1\+: Классификация транспортных средств}{Пример 1\+: Классификация транспортных средств}}\label{md__r_e_a_d_m_e_autotoc_md36}
+{\bfseries{items.\+txt\+:}}
+
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{RecordClassifier}
-\DoxyCodeLine{├──\ Record.h\ /\ Record.cpp\ \ \ \ \ \ \ \ \ \#\ Модель\ объекта}
-\DoxyCodeLine{├──\ Rule.h\ /\ Rule.cpp\ \ \ \ \ \ \ \ \ \ \ \ \ \#\ Описание\ правил\ классификации}
-\DoxyCodeLine{├──\ Parser.h\ /\ Parser.cpp\ \ \ \ \ \ \ \ \ \#\ Разбор\ входных\ строк}
-\DoxyCodeLine{├──\ Validation.h\ /\ Validation.cpp\ \#\ Проверка\ корректности\ данных}
-\DoxyCodeLine{├──\ Classifier.h\ /\ Classifier.cpp\ \#\ Логика\ классификации}
-\DoxyCodeLine{├──\ tests/}
-\DoxyCodeLine{│\ \ \ \ ├──\ ParseRecordLineTests.cpp}
-\DoxyCodeLine{│\ \ \ \ ├──\ ParseClassLineTests.cpp}
-\DoxyCodeLine{│\ \ \ \ ├──\ FilteringRecordsTests.cpp}
-\DoxyCodeLine{│\ \ \ \ └──\ ClassifyTests.cpp}
-\DoxyCodeLine{├──\ README.md}
-\DoxyCodeLine{└──\ CMakeLists.txt\ /\ .sln}
+\DoxyCodeLine{Car:\ color\ =\ [2],\ doors\ =\ [4],\ engine\ =\ [2000]}
+\DoxyCodeLine{Bike:\ color\ =\ [3],\ wheels\ =\ [2]}
+\DoxyCodeLine{Bus:\ color\ =\ [2,\ 3],\ doors\ =\ [2],\ seats\ =\ [40]}
 
 \end{DoxyCode}
+
+
+{\bfseries{rules.\+txt\+:}}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Has\ doors:\ has\ property\ "{}doors"{}}
+\DoxyCodeLine{Two\ wheels:\ property\ "{}wheels"{}\ has\ 2\ values}
+\DoxyCodeLine{Red\ vehicle:\ property\ "{}color"{}\ contains\ value\ 2}
+\DoxyCodeLine{Big\ bus:\ property\ "{}seats"{}\ =\ [40]}
+
+\end{DoxyCode}
+
+
+{\bfseries{Запуск\+:}}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{RecordClassifier.exe\ items.txt\ rules.txt\ output.txt}
+
+\end{DoxyCode}
+
+
+{\bfseries{Результат (output.\+txt)\+:}}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Has\ doors:\ Car,\ Bus}
+\DoxyCodeLine{Two\ wheels:\ Bike}
+\DoxyCodeLine{Red\ vehicle:\ Car,\ Bus}
+\DoxyCodeLine{Big\ bus:\ Bus}
+
+\end{DoxyCode}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md37}{}\doxysubsection{\texorpdfstring{Пример 2\+: Классификация мебели}{Пример 2\+: Классификация мебели}}\label{md__r_e_a_d_m_e_autotoc_md37}
+{\bfseries{items.\+txt\+:}}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Wardrobe:\ color\ =\ [1,\ 2],\ size\ =\ [10,\ 20,\ 30],\ coating\ =\ [44]}
+\DoxyCodeLine{Table:\ coating\ =\ [44],\ color\ =\ [5]}
+\DoxyCodeLine{Chair:\ size\ =\ [5],\ color\ =\ [1]}
+\DoxyCodeLine{Sofa:\ color\ =\ [2,\ 3],\ size\ =\ [15,\ 20]}
+
+\end{DoxyCode}
+
+
+{\bfseries{rules.\+txt\+:}}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Blue\ furniture:\ property\ "{}color"{}\ contains\ value\ 1}
+\DoxyCodeLine{With\ coating:\ has\ property\ "{}coating"{}}
+\DoxyCodeLine{Voluminous:\ property\ "{}size"{}\ has\ 3\ values}
+\DoxyCodeLine{Matte:\ property\ "{}coating"{}\ =\ [44]}
+
+\end{DoxyCode}
+
+
+{\bfseries{Результат\+:}}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Blue\ furniture:\ Wardrobe,\ Chair}
+\DoxyCodeLine{With\ coating:\ Wardrobe,\ Table}
+\DoxyCodeLine{Voluminous:\ Wardrobe}
+\DoxyCodeLine{Matte:\ Wardrobe,\ Table}
+
+\end{DoxyCode}
+
+
+\DoxyHorRuler{0}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md39}{}\doxysection{\texorpdfstring{Обработка ошибок}{Обработка ошибок}}\label{md__r_e_a_d_m_e_autotoc_md39}
+Программа выполняет комплексную проверку входных данных и выводит детальные сообщения об ошибках.\hypertarget{md__r_e_a_d_m_e_autotoc_md40}{}\doxysubsection{\texorpdfstring{Таблица ошибок}{Таблица ошибок}}\label{md__r_e_a_d_m_e_autotoc_md40}
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{3}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Тип ошибки  }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Пример  }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Сообщение  }\\\cline{1-3}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Тип ошибки  }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Пример  }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Сообщение  }\\\cline{1-3}
+\endhead
+{\bfseries{Файл не найден}}  &Отсутствует {\ttfamily items.\+txt}  &{\ttfamily Cannot open the file}  \\\cline{1-3}
+{\bfseries{Некорректное значение}}  &{\ttfamily color = \mbox{[}1, a, 3\mbox{]}}  &{\ttfamily Invalid value format in property list}  \\\cline{1-3}
+{\bfseries{Дублирующееся свойство}}  &{\ttfamily color=\mbox{[}1\mbox{]}, color=\mbox{[}2\mbox{]}}  &{\ttfamily Duplicate property name "{}color"{} detected}  \\\cline{1-3}
+{\bfseries{Пустое имя записи}}  &{\ttfamily \+: color=\mbox{[}1\mbox{]}}  &{\ttfamily No properties defined for record}  \\\cline{1-3}
+{\bfseries{Пустой файл записей}}  &Пустой {\ttfamily items.\+txt}  &{\ttfamily No records found in input file}  \\\cline{1-3}
+{\bfseries{Пустой файл правил}}  &Пустой {\ttfamily rules.\+txt}  &{\ttfamily No classes or rules found in input file}  \\\cline{1-3}
+{\bfseries{Неверный формат правила}}  &{\ttfamily Class\+: if "{}size"{} = number}  &{\ttfamily Invalid rule format}  \\\cline{1-3}
+{\bfseries{Несоответствие типов}}  &{\ttfamily size = \mbox{[}1, "{}two"{}\mbox{]}}  &{\ttfamily Type mismatch\+: expected integer values only}  \\\cline{1-3}
+{\bfseries{Ошибка синтаксиса в записи}}  &{\ttfamily Car\+: color \mbox{[}1, 2\mbox{]}}  &{\ttfamily Syntax error in record definition}  \\\cline{1-3}
+{\bfseries{Ошибка синтаксиса в правиле}}  &{\ttfamily Class\+: "{}coating"{}}  &{\ttfamily Syntax error in class rule definition}  \\\cline{1-3}
+{\bfseries{Незакрытая скобка}}  &{\ttfamily Car\+: color = \mbox{[}1, 2, 3}  &{\ttfamily Syntax error\+: missing closing bracket}  \\\cline{1-3}
+{\bfseries{Лишняя запятая}}  &{\ttfamily Bike\+: wheels = \mbox{[}2,\mbox{]}}  &{\ttfamily Invalid value format\+: trailing comma}  \\\cline{1-3}
+{\bfseries{Дублирующееся имя записи}}  &Два {\ttfamily Car}  &{\ttfamily Duplicate record name detected\+: Car}  \\\cline{1-3}
+{\bfseries{Неизвестный тип правила}}  &{\ttfamily property "{}speed"{} greater than 100}  &{\ttfamily Unsupported rule type}  \\\cline{1-3}
+{\bfseries{Пустое имя класса}}  &{\ttfamily \+: has property "{}doors"{}}  &{\ttfamily Class name missing in rule definition}  \\\cline{1-3}
+{\bfseries{Пустое имя свойства}}  &{\ttfamily has property "{}"{}}  &{\ttfamily Invalid rule\+: property name cannot be empty}  \\\cline{1-3}
+{\bfseries{Неверный разделитель}}  &{\ttfamily Car -\/ color = \mbox{[}1, 2\mbox{]}}  &`Syntax error\+: expected '\+:\textquotesingle{} after record name\`{}  \\\cline{1-3}
+\end{longtabu}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md41}{}\doxysubsection{\texorpdfstring{Поведение при ошибках}{Поведение при ошибках}}\label{md__r_e_a_d_m_e_autotoc_md41}
+
+\begin{DoxyItemize}
+\item При обнаружении ошибки программа {\bfseries{немедленно завершается}}
+\item Выводится {\bfseries{детальное сообщение}} с описанием проблемы
+\item Выходной файл {\ttfamily output.\+txt} {\bfseries{не создается}}
+\item Код возврата\+: {\ttfamily 1} (ошибка), {\ttfamily 0} (успех)
+\end{DoxyItemize}
+
+\DoxyHorRuler{0}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md43}{}\doxysection{\texorpdfstring{Тестирование}{Тестирование}}\label{md__r_e_a_d_m_e_autotoc_md43}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md44}{}\doxysubsection{\texorpdfstring{Статистика тестирования}{Статистика тестирования}}\label{md__r_e_a_d_m_e_autotoc_md44}
+
+\begin{DoxyItemize}
+\item {\bfseries{Всего тестов\+:}} 45
+\item {\bfseries{Успешно пройдено\+:}} 45
+\item {\bfseries{Провалено\+:}} 0
+\item {\bfseries{Покрытие кода\+:}} \texorpdfstring{$\sim$}{\string~}95\%
+\end{DoxyItemize}\hypertarget{md__r_e_a_d_m_e_autotoc_md45}{}\doxysubsection{\texorpdfstring{Тестируемые функции}{Тестируемые функции}}\label{md__r_e_a_d_m_e_autotoc_md45}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md46}{}\doxysubsubsection{\texorpdfstring{1. parse\+\_\+record\+\_\+line (16 тестов)}{1. parse\+\_\+record\+\_\+line (16 тестов)}}\label{md__r_e_a_d_m_e_autotoc_md46}
+Проверка разбора строк с записями\+:
+
+
+\begin{DoxyItemize}
+\item Корректные записи с различными свойствами
+\item Некорректные значения (не числа)
+\item Дублирующиеся свойства
+\item Пустые имена и свойства
+\item Незакрытые скобки и синтаксические ошибки
+\item Отрицательные числа
+\item Стресс-\/тесты (1000+ свойств)
+\end{DoxyItemize}\hypertarget{md__r_e_a_d_m_e_autotoc_md47}{}\doxysubsubsection{\texorpdfstring{2. parse\+\_\+class\+\_\+line (16 тестов)}{2. parse\+\_\+class\+\_\+line (16 тестов)}}\label{md__r_e_a_d_m_e_autotoc_md47}
+Проверка разбора правил классификации\+:
+
+
+\begin{DoxyItemize}
+\item Все типы правил (HAS\+\_\+\+PROPERTY, PROPERTY\+\_\+\+SIZE, CONTAINS\+\_\+\+VALUE, EQUALS\+\_\+\+EXACTLY)
+\item Некорректный формат правил
+\item Пустые имена классов
+\item Отсутствие кавычек и скобок
+\item Неизвестные типы правил
+\end{DoxyItemize}\hypertarget{md__r_e_a_d_m_e_autotoc_md48}{}\doxysubsubsection{\texorpdfstring{3. validate\+\_\+records (16 тестов)}{3. validate\+\_\+records (16 тестов)}}\label{md__r_e_a_d_m_e_autotoc_md48}
+Проверка валидации записей\+:
+
+
+\begin{DoxyItemize}
+\item Корректные и некорректные записи
+\item Пустой список записей
+\item Пустой список свойств
+\item Дублирующиеся имена
+\item Отрицательные значения
+\item Большое количество свойств (производительность)
+\end{DoxyItemize}\hypertarget{md__r_e_a_d_m_e_autotoc_md49}{}\doxysubsubsection{\texorpdfstring{4. validate\+\_\+classes (14 тестов)}{4. validate\+\_\+classes (14 тестов)}}\label{md__r_e_a_d_m_e_autotoc_md49}
+Проверка валидации правил\+:
+
+
+\begin{DoxyItemize}
+\item Корректные правила
+\item Пустой список правил
+\item Неверный синтаксис
+\item Некорректные значения
+\item Пустые имена классов
+\end{DoxyItemize}\hypertarget{md__r_e_a_d_m_e_autotoc_md50}{}\doxysubsubsection{\texorpdfstring{5. classify (9 тестов)}{5. classify (9 тестов)}}\label{md__r_e_a_d_m_e_autotoc_md50}
+Проверка логики классификации\+:
+
+
+\begin{DoxyItemize}
+\item Запись соответствует одному правилу
+\item Запись соответствует нескольким правилам
+\item Несколько записей → разные классы
+\item Классы без совпадений
+\item Стресс-\/тесты (1000+ записей)
+\end{DoxyItemize}\hypertarget{md__r_e_a_d_m_e_autotoc_md51}{}\doxysubsection{\texorpdfstring{Запуск тестов}{Запуск тестов}}\label{md__r_e_a_d_m_e_autotoc_md51}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\#\ В\ Visual\ Studio}
+\DoxyCodeLine{Test\ →\ Run\ All\ Tests}
+\DoxyCodeLine{}
+\DoxyCodeLine{\#\ Или\ через\ командную\ строку}
+\DoxyCodeLine{vstest.console.exe\ FilteringRecordsTests.dll}
+
+\end{DoxyCode}
+
+
+\DoxyHorRuler{0}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md53}{}\doxysection{\texorpdfstring{Документация}{Документация}}\label{md__r_e_a_d_m_e_autotoc_md53}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md54}{}\doxysubsection{\texorpdfstring{Техническая документация}{Техническая документация}}\label{md__r_e_a_d_m_e_autotoc_md54}
+Проект включает полный комплект технической документации в соответствии с ГОСТ 19\+:
+
+
+\begin{DoxyEnumerate}
+\item {\bfseries{Техническое задание}} — требования к функциональности и надежности
+\item {\bfseries{Внешняя спецификация}} — описание интерфейсов и форматов данных
+\item {\bfseries{Внутренняя спецификация}} — описание структур данных и алгоритмов
+\item {\bfseries{Программа и методика испытаний}} — план тестирования и тест-\/кейсы
+\item {\bfseries{Руководство программиста}} — инструкции по установке и использованию
+\end{DoxyEnumerate}\hypertarget{md__r_e_a_d_m_e_autotoc_md55}{}\doxysubsection{\texorpdfstring{Doxygen документация}{Doxygen документация}}\label{md__r_e_a_d_m_e_autotoc_md55}
+Для генерации HTML-\/документации из комментариев кода\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{doxygen\ Doxyfile}
+
+\end{DoxyCode}
+
+
+Документация будет создана в папке {\ttfamily docs/html/}.
+
+\DoxyHorRuler{0}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md57}{}\doxysection{\texorpdfstring{Алгоритм работы программы}{Алгоритм работы программы}}\label{md__r_e_a_d_m_e_autotoc_md57}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1.\ Запуск\ программы}
+\DoxyCodeLine{\ \ \ ├─\ Чтение\ параметров\ командной\ строки}
+\DoxyCodeLine{\ \ \ └─\ Проверка\ наличия\ файлов}
+\DoxyCodeLine{}
+\DoxyCodeLine{2.\ Парсинг\ входных\ данных}
+\DoxyCodeLine{\ \ \ ├─\ Чтение\ items.txt\ →\ parse\_record\_line()}
+\DoxyCodeLine{\ \ \ ├─\ Чтение\ rules.txt\ →\ parse\_class\_line()}
+\DoxyCodeLine{\ \ \ └─\ Сохранение\ в\ структуры\ данных}
+\DoxyCodeLine{}
+\DoxyCodeLine{3.\ Валидация\ данных}
+\DoxyCodeLine{\ \ \ ├─\ Проверка\ записей\ →\ validate\_records()}
+\DoxyCodeLine{\ \ \ ├─\ Проверка\ правил\ →\ validate\_classes()}
+\DoxyCodeLine{\ \ \ └─\ Обработка\ ошибок\ →\ Error::print()}
+\DoxyCodeLine{}
+\DoxyCodeLine{4.\ Классификация}
+\DoxyCodeLine{\ \ \ ├─\ Сопоставление\ записей\ и\ правил\ →\ classify()}
+\DoxyCodeLine{\ \ \ └─\ Формирование\ результатов}
+\DoxyCodeLine{}
+\DoxyCodeLine{5.\ Вывод\ результатов}
+\DoxyCodeLine{\ \ \ ├─\ Печать\ на\ экран}
+\DoxyCodeLine{\ \ \ ├─\ Сохранение\ в\ output.txt\ (опционально)}
+\DoxyCodeLine{\ \ \ └─\ Завершение\ программы\ (код\ возврата\ 0)}
+
+\end{DoxyCode}
+
+
+\DoxyHorRuler{0}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md59}{}\doxysection{\texorpdfstring{🔧 Ключевые функции}{🔧 Ключевые функции}}\label{md__r_e_a_d_m_e_autotoc_md59}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md60}{}\doxysubsection{\texorpdfstring{Основные функции программы}{Основные функции программы}}\label{md__r_e_a_d_m_e_autotoc_md60}
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{3}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Функция  }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Назначение  }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Возвращаемое значение  }\\\cline{1-3}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Функция  }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Назначение  }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Возвращаемое значение  }\\\cline{1-3}
+\endhead
+{\ttfamily main()}  &Точка входа программы  &{\ttfamily int} (0 или 1)  \\\cline{1-3}
+{\ttfamily parse\+\_\+record\+\_\+line()}  &Разбор строки записи  &{\ttfamily bool}  \\\cline{1-3}
+{\ttfamily parse\+\_\+class\+\_\+line()}  &Разбор строки правила  &{\ttfamily bool}  \\\cline{1-3}
+{\ttfamily validate\+\_\+records()}  &Проверка корректности записей  &{\ttfamily \doxylink{struct_data_check_result}{Data\+Check\+Result}}  \\\cline{1-3}
+{\ttfamily validate\+\_\+classes()}  &Проверка корректности правил  &{\ttfamily \doxylink{struct_data_check_result}{Data\+Check\+Result}}  \\\cline{1-3}
+{\ttfamily classify()}  &Классификация записей  &{\ttfamily map\texorpdfstring{$<$}{<}string, vector\texorpdfstring{$<$}{<}string\texorpdfstring{$>$}{>}\texorpdfstring{$>$}{>}}  \\\cline{1-3}
+{\ttfamily trim()}  &Удаление пробелов и табуляций  &{\ttfamily string}  \\\cline{1-3}
+\end{longtabu}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md61}{}\doxysubsection{\texorpdfstring{Вспомогательные функции}{Вспомогательные функции}}\label{md__r_e_a_d_m_e_autotoc_md61}
+
+\begin{DoxyItemize}
+\item {\ttfamily print\+\_\+help()} — вывод справки о программе
+\item {\ttfamily print\+\_\+results()} — форматированный вывод результатов
+\item {\ttfamily save\+\_\+to\+\_\+file()} — сохранение результатов в файл
+\end{DoxyItemize}
+
+\DoxyHorRuler{0}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md63}{}\doxysection{\texorpdfstring{Информация о проекте}{Информация о проекте}}\label{md__r_e_a_d_m_e_autotoc_md63}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md64}{}\doxysubsection{\texorpdfstring{Разработчик}{Разработчик}}\label{md__r_e_a_d_m_e_autotoc_md64}
+
+\begin{DoxyItemize}
+\item {\bfseries{Студент\+:}} Алхабил Бахаа А.\+М.
+\item {\bfseries{Группа\+:}} \mbox{[}Номер группы\mbox{]}
+\item {\bfseries{Факультет\+:}} \mbox{[}Название факультета\mbox{]}
+\end{DoxyItemize}\hypertarget{md__r_e_a_d_m_e_autotoc_md65}{}\doxysubsection{\texorpdfstring{Научный руководитель}{Научный руководитель}}\label{md__r_e_a_d_m_e_autotoc_md65}
+
+\begin{DoxyItemize}
+\item {\bfseries{Преподаватель\+:}} доц. Сычев О.\+А.
+\end{DoxyItemize}\hypertarget{md__r_e_a_d_m_e_autotoc_md66}{}\doxysubsection{\texorpdfstring{Учебная дисциплина}{Учебная дисциплина}}\label{md__r_e_a_d_m_e_autotoc_md66}
+
+\begin{DoxyItemize}
+\item {\bfseries{Курс\+:}} Качество и надёжность программного обеспечения
+\item {\bfseries{Университет\+:}} Волгоградский государственный технический университет (ВолгГТУ)
+\item {\bfseries{Год\+:}} 2025
+\end{DoxyItemize}
+
+\DoxyHorRuler{0}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md68}{}\doxysection{\texorpdfstring{Лицензия}{Лицензия}}\label{md__r_e_a_d_m_e_autotoc_md68}
+Данный проект разработан в учебных целях. ~\newline
+ © 2025 Алхабил Бахаа А.\+М., Волгоградский государственный технический университет
+
+\DoxyHorRuler{0}
  
