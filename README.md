@@ -96,30 +96,19 @@ enum RuleType {
 
 ## UML-диаграмма классов / UML Class Diagram
 
-```
-
-![function_call_diagram](https://github.com/user-attachments/assets/b0661598-870d-494f-93d6-8e7fb7412b11)
-
-```
+![UML Class Diagram](images/uml-class-diagram.png)
 
 ---
 
 ## Диаграмма вызовов функций / Function Call Diagram
 
-```
-![Диаграмма вызовов функций ](https://github.com/user-attachments/assets/e3b03ba5-c411-438a-9c46-b2b44303cb8e)
-
-```
+![Function Call Diagram](images/function-call-diagram.png)
 
 ---
 
 ## Диаграмма потоков данных / Data Flow Diagram
 
-```
-
-![Диаграмма потоков данных ](https://github.com/user-attachments/assets/84fd9882-0010-49bf-9cda-1e9d92b7271d)
-
-```
+![Data Flow Diagram](images/data-flow-diagram.png)
 
 ---
 
@@ -220,6 +209,11 @@ FilteringRecords/
 │   ├── Record.cpp
 │   └── Validation.cpp
 │
+├── images
+│   ├── uml-class-diagram.png
+│   ├── function-call-diagram.png
+│   └── data-flow-diagram.png
+│
 ├── Resource Files
 │   (папка для дополнительных ресурсов — например, входных данных)
 │
@@ -257,11 +251,10 @@ RecordClassifier.exe items.txt rules.txt output.txt
 
 ## Автор / Author
 
-Студент : Алхабил Бахаа А.М.
-Преподаватель: доц. Сычев О.А.
-Качество и надёжность программного обеспечения
-Волгоградский государственный технический университет
-Год / Year: 2025
+**Студент:** Алхабил Бахаа А.М.  
+**Преподаватель:** доц. Сычев О.А.  
+**Дисциплина:** Качество и надёжность программного обеспечения  
+**Университет:** Волгоградский государственный технический университет  
+**Год / Year:** 2025
 
 ---
-
