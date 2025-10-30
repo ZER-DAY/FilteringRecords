@@ -97,7 +97,8 @@ enum RuleType {
 ## UML-диаграмма классов / UML Class Diagram
 
 ```
-![UML-диаграмма классов](https://github.com/user-attachments/assets/0a17dc16-6313-4a2f-be61-c1d83e5e26c3)
+
+![function_call_diagram](https://github.com/user-attachments/assets/b0661598-870d-494f-93d6-8e7fb7412b11)
 
 ```
 
