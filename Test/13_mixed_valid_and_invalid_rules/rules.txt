@@ -1,0 +1,1 @@
+Has x: has property "x"

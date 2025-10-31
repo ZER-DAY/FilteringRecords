@@ -1,0 +1,3 @@
+Car: color = [2], doors = [4]
+Bike: color = [3], wheels = [2]
+Bus: color = [2, 3], doors = [2], seats = [40]

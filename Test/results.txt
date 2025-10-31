@@ -1,0 +1,192 @@
+
+==== TEST 01_single_match ====
+Один класс совпал с одной записью
+
+Output:
+--------------------------------------------
+Class          | Matching Records
+--------------------------------------------
+With coating: Table
+--------------------------------------------
+[OK] Classification completed.
+
+
+==== TEST 02_multi_rules_one_record ====
+Одна запись подходит под несколько правил
+
+Output:
+--------------------------------------------
+Class          | Matching Records
+--------------------------------------------
+Blue: Wardrobe
+Voluminous: Wardrobe
+--------------------------------------------
+[OK] Classification completed.
+
+
+==== TEST 03_no_match ====
+Нет совпадений ни с одним правилом
+
+Output:
+--------------------------------------------
+Class          | Matching Records
+--------------------------------------------
+Blue: -
+--------------------------------------------
+[OK] Classification completed.
+
+
+==== TEST 04_multi_records_diff_classes ====
+Несколько записей → разные классы
+
+Output:
+--------------------------------------------
+Class          | Matching Records
+--------------------------------------------
+Has doors: Car
+Has wheels: Bike
+Red: Car
+Blue: Bike
+--------------------------------------------
+[OK] Classification completed.
+
+
+==== TEST 05_class_no_matches ====
+Класс без совпадений
+
+Output:
+--------------------------------------------
+Class          | Matching Records
+--------------------------------------------
+Matte: -
+--------------------------------------------
+[OK] Classification completed.
+
+
+==== TEST 06_all_rules_pass ====
+Одна запись удовлетворяет всем правилам
+
+Output:
+--------------------------------------------
+Class          | Matching Records
+--------------------------------------------
+With coating: Wardrobe
+Voluminous: Wardrobe
+Blue: Wardrobe
+Matte: Wardrobe
+--------------------------------------------
+[OK] Classification completed.
+
+
+==== TEST 07_red_blue_doors_wheels ====
+Набор правил: цвет/двери/колёса
+
+Output:
+--------------------------------------------
+Class          | Matching Records
+--------------------------------------------
+Has doors: Car, Bus
+Has wheels: Bike
+Red: Car, Bus
+Blue: Bike, Bus
+Big bus: Bus
+--------------------------------------------
+[OK] Classification completed.
+
+
+==== TEST 08_equals_exactly_match ====
+Полное совпадение массива значений (= [...])
+
+Output:
+--------------------------------------------
+Class          | Matching Records
+--------------------------------------------
+ExactCoat: Panel
+--------------------------------------------
+[OK] Classification completed.
+
+
+==== TEST 09_equals_exactly_no_match ====
+Полное совпадение: нет совпадения
+
+Output:
+--------------------------------------------
+Class          | Matching Records
+--------------------------------------------
+Matte: -
+--------------------------------------------
+[OK] Classification completed.
+
+
+==== TEST 10_property_size_exact ====
+property \"x\" has N values — точное N
+
+Output:
+--------------------------------------------
+Class          | Matching Records
+--------------------------------------------
+Blue: Wardrobe
+Voluminous: Wardrobe
+With coating: Wardrobe
+Matte: Wardrobe
+--------------------------------------------
+[OK] Classification completed.
+
+
+==== TEST 11_contains_value_multi ====
+contains value — совпадения по значениям
+
+[ERROR] No output produced.
+
+
+==== TEST 12_has_property_only ====
+has property — наличие свойства
+
+Output:
+--------------------------------------------
+Class          | Matching Records
+--------------------------------------------
+Matte: -
+--------------------------------------------
+[OK] Classification completed.
+
+
+==== TEST 13_mixed_valid_and_invalid_rules ====
+Смешанные валидные/невалидные правила
+
+Output:
+--------------------------------------------
+Class          | Matching Records
+--------------------------------------------
+Has x: Item1, Item2, Item1000
+--------------------------------------------
+[OK] Classification completed.
+
+
+==== TEST 14_many_records_perf_light ====
+Производительный тест: много записей (лайт)
+
+Output:
+--------------------------------------------
+Class          | Matching Records
+--------------------------------------------
+Blue: Wardrobe
+Voluminous: Wardrobe
+--------------------------------------------
+[OK] Classification completed.
+
+
+==== TEST 15_edge_empty_values ====
+Пограничный случай: пустые списки значений []
+
+Output:
+--------------------------------------------
+Class          | Matching Records
+--------------------------------------------
+Has doors: Car
+Has wheels: Bike
+Red: Car, Bus
+Blue: Bike, Bus
+--------------------------------------------
+[OK] Classification completed.
+

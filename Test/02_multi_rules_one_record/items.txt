@@ -1,0 +1,1 @@
+Wardrobe: color = [1], size = [10, 20, 30]

@@ -1,0 +1,9 @@
+--------------------------------------------
+Class          | Matching Records
+--------------------------------------------
+With coating: Wardrobe
+Voluminous: Wardrobe
+Blue: Wardrobe
+Matte: Wardrobe
+--------------------------------------------
+[OK] Classification completed.

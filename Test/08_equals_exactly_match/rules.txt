@@ -1,0 +1,1 @@
+ExactCoat: property "coating" = [10, 20]

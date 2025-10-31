@@ -1,0 +1,1 @@
+Table: color = [1, 4], size = [20, 40], coating = [44]

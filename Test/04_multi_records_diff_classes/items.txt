@@ -1,0 +1,2 @@
+Car: color = [2], doors = [4]
+Bike: color = [3], wheels = [2]

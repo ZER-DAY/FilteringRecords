@@ -1,0 +1,4 @@
+Has doors: has property "doors"
+Has wheels: has property "wheels"
+Red: property "color" contains value 2
+Blue: property "color" contains value 3

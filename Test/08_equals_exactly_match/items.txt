@@ -1,0 +1,1 @@
+Panel: coating = [10, 20]

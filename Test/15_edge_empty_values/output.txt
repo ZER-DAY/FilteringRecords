@@ -1,0 +1,9 @@
+--------------------------------------------
+Class          | Matching Records
+--------------------------------------------
+Has doors: Car
+Has wheels: Bike
+Red: Car, Bus
+Blue: Bike, Bus
+--------------------------------------------
+[OK] Classification completed.

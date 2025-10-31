@@ -1,0 +1,7 @@
+--------------------------------------------
+Class          | Matching Records
+--------------------------------------------
+Blue: Wardrobe
+Voluminous: Wardrobe
+--------------------------------------------
+[OK] Classification completed.
