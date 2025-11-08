@@ -1,12 +1,13 @@
 ﻿// ============================================================================
-// FilteringRecords - Main Program (Improved Version)
-// Version: 2.3
+// FilteringRecords - Main Program (Improved Version - FIXED)
+// Version: 2.3.1
 // 
 // 
 // Improvements:
 // - Reduced cyclomatic complexity from 20 to 8
 // - Extracted helper functions for better maintainability
 // - Increased code comments from 5% to 16%
+// - FIXED: std::out_of_range exception in writeResults()
 // ============================================================================
 
 #include <iostream>
@@ -195,6 +196,8 @@ bool validateData(const vector<Record>& records, const vector<ClassRule>& classe
  * @param result Map of classification results
  * @return true if file written successfully, false otherwise
  *
+ * FIXED: Use find() instead of at() to avoid std::out_of_range exception
+ *
  * Complexity: CCN = 4, NLOC = 28
  */
 bool writeResults(const string& outputFile, const vector<ClassRule>& classes,
@@ -215,13 +218,19 @@ bool writeResults(const string& outputFile, const vector<ClassRule>& classes,
     for (const auto& c : classes) {
         fout << c.className << ": ";
 
-        // Check if class has matching records
-        if (result.at(c.className).empty()) {
+        // FIXED: Use find() instead of at() to avoid exception
+        // at() throws std::out_of_range if key doesn't exist
+        // find() returns end() iterator if key doesn't exist
+        auto it = result.find(c.className);
+
+        // Check if class exists in results and has matching records
+        if (it == result.end() || it->second.empty()) {
+            // Class has no matching records
             fout << "-\n";
         }
         else {
             // Write comma-separated list of matching records
-            const auto& matches = result.at(c.className);
+            const auto& matches = it->second;
             for (size_t i = 0; i < matches.size(); i++) {
                 fout << matches[i];
                 if (i + 1 < matches.size()) fout << ", ";
